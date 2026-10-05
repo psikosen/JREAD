@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "status": "frozen",
+  "frozen_at_utc": "2026-10-05T15:26:15.113778+00:00",
+  "runner_sha256": "023bb0003cf67bce39e5df8d891652e661400cf5205b015f550ee15a4126cf88",
+  "base_protocol": {
+    "path": "/home/psikosen/JREAD/tests/fixtures/accuracy-anime-matched.json",
+    "sha256": "0710e0a7b2d9dc1b18ef47022336aeb81d7ea50555af62d7d9c68c10753cb6d9"
+  },
+  "calibration_report": {
+    "path": "/media/psikosen/newvolume/jread-anime-matched/calibration_baseline/report.json",
+    "sha256": "ee00a60f4f272c0cc364c09d91bf9812f4ae8ce6150b9befd3a2faa2ff8f9de5"
+  },
+  "calibration_grades": [
+    {
+      "path": "/media/psikosen/newvolume/jread-anime-matched/review/calibration_baseline-grades.json",
+      "sha256": "3b5b28188931bc2d5d718e31f27c6139e341ce55e3110040d7c2ac6d5fffe0b9"
+    }
+  ],
+  "system_instruction": "Preserve participant roles: an omitted Japanese subject does not by itself justify adding I or we; when the source does not establish the participant, use natural neutral English wording instead of assigning an identity.",
+  "selection_basis": {
+    "case_id": "nakano_04",
+    "observed_clean_text_failure": "Invented inclusive first-person participant: we can talk.",
+    "mechanism": "Unstated-subject preservation",
+    "calibration_clean_counts": {
+      "pass": 4,
+      "fail": 1,
+      "denominator": 5
+    },
+    "validation_outputs_seen": false,
+    "validation_asr_generated": false,
+    "candidate_count": 1
+  },
+  "production_changed": false
+}

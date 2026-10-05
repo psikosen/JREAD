@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "status": "frozen",
+  "case_count": 20,
+  "case_ids": [
+    1632,
+    1638,
+    1604,
+    1607,
+    1641,
+    1569,
+    1571,
+    1514,
+    1592,
+    1559,
+    1643,
+    1639,
+    1539,
+    1649,
+    1517,
+    1627,
+    1622,
+    1562,
+    1636,
+    1647
+  ],
+  "runner_sha256": "0e516982356d200c14738ced3390b2b94e65c81bf9fc94594a4f3e1d9357a39a",
+  "asr_settings": {
+    "provider": "cpu",
+    "num_threads": 4,
+    "sample_rate": 16000,
+    "feature_dim": 80,
+    "decoding_method": "greedy_search",
+    "padding_seconds_each_side": 0.9
+  },
+  "inputs": {
+    "path": "/media/psikosen/newvolume/jread-reazon/data/development-audio-v1.json",
+    "sha256": "246461cfff907a5222a87c6b7351d0fa8355d8a6d0d021f66cf9d87e9b83dc18"
+  },
+  "source_derivation": {
+    "path": "/home/psikosen/JREAD/test-results/accuracy-streaming-turbo-none-translation-development.json",
+    "sha256": "28cf97210dab5ff277d00eb01c0dca4567df1f170c1b1a53bb281fbf84a034d8"
+  },
+  "review_only": {
+    "path": "/media/psikosen/newvolume/jread-translategemma/data/development-review-only-v1.json",
+    "sha256": "8ae4d4db4f6f9847adcdc0e340034f5b98509a50eb4cd1e65b4ebeb50c2d3e3a"
+  },
+  "rubric": {
+    "path": "/home/psikosen/JREAD/tests/fixtures/accuracy-development-rubric.json",
+    "sha256": "ce7514d3e12dded03e3c2ce0894cb0e3750720d0034aec0f63d45256cf3a89e9"
+  },
+  "model_revision": "291488c8151be24d7da4bf7af26e533fad96e407",
+  "model_provenance": {
+    "path": "/media/psikosen/newvolume/jread-reazon/model/provenance.json",
+    "sha256": "179e5fad7d49880c53400df3d9963d9f5f70cf775b3822d677e5051ae9f5a992"
+  },
+  "runtime_manifest": {
+    "path": "/media/psikosen/newvolume/jread-reazon/runtime/runtime-manifest.json",
+    "sha256": "9a787d95bb372b6cd38f970ef5283cb80b59ad3e3529006b11064537c4746426"
+  },
+  "runtime_versions": {
+    "sherpa-onnx": "1.13.8",
+    "sherpa-onnx-core": "1.13.8",
+    "numpy": "2.2.6"
+  },
+  "helpers": {
+    "0": {
+      "path": "/home/psikosen/JREAD/tests/evaluate_e4b_punctuation.py",
+      "sha256": "fa9cc5c675fdfc7d0558d6fa1afa8a3f1996a050b21b8b10d8474cced1999a32"
+    },
+    "1": {
+      "path": "/home/psikosen/JREAD/tests/fixtures/accuracy-e4b-punctuation.json",
+      "sha256": "c7fe71ca407f5b5582f462161840232ac1ba4cc1b5ddeb335d400846090b5dc1"
+    },
+    "2": {
+      "path": "/home/psikosen/JREAD/tests/evaluate_e4b_text_wording.py",
+      "sha256": "654cc6b328287076d57c8c41039c4863db8024d563a2d6a3658de0129e1d8e72"
+    },
+    "3": {
+      "path": "/home/psikosen/JREAD/tests/fixtures/accuracy-e4b-text-wording.json",
+      "sha256": "fc7c95a08c72b2de804be19b4b9cd11c69fea6528b40a3df13fd4bdd3396f956"
+    },
+    "4": {
+      "path": "/home/psikosen/JREAD/tests/evaluate_translation_ensemble.py",
+      "sha256": "92b431bab0ea6d5bcabfa51c301135c3ce27e560d0ecdca8affbdb73ef8aff05"
+    },
+    "5": {
+      "path": "/home/psikosen/JREAD/tests/evaluate_streaming_combinations.py",
+      "sha256": "23de767fb83a05ea36712fe76ea370eabf08dbfd8dce8c68404bc84ccbd5a94c"
+    },
+    "6": {
+      "path": "/home/psikosen/JREAD/tests/evaluate_streaming_translation.py",
+      "sha256": "75c275d79898aa0eb28aca0c964cfb3f8e278f1d02ae982a44b949c22fce355c"
+    },
+    "7": {
+      "path": "/home/psikosen/JREAD/tests/evaluate_translation.py",
+      "sha256": "5d10fd2cee5e89191b6d0e4eeb3c7876f3b4674fd005d09e155892991e629582"
+    },
+    "8": {
+      "path": "/home/psikosen/JREAD/jread/gemma.py",
+      "sha256": "82c500f169e26b7e8d53df874fcb3b091d095a6bc9e5c3957f67d4ce05491b49"
+    }
+  },
+  "official_implementation": [
+    {
+      "path": "/media/psikosen/newvolume/jread-reazon/data/upstream-huggingface.py",
+      "sha256": "de117c0d74917f30446d4b7a20c31948192302ce1f99f0f115c01c45158771d3",
+      "url": "https://raw.githubusercontent.com/reazon-research/ReazonSpeech/2d4d4762e7ee294ac8e47a177ac2e9b0e8d0d43f/pkg/k2-asr/src/huggingface.py"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-reazon/data/upstream-transcribe.py",
+      "sha256": "d5288b8120b8a296cfbed888e3c16c0adbd9c055653cc36516ca961e4c161cea",
+      "url": "https://raw.githubusercontent.com/reazon-research/ReazonSpeech/2d4d4762e7ee294ac8e47a177ac2e9b0e8d0d43f/pkg/k2-asr/src/transcribe.py"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-reazon/data/upstream-audio.py",
+      "sha256": "65ccdc5b40158ee5f966011758a074ea8a41673070ee4ae1124a689bbb510e51",
+      "url": "https://raw.githubusercontent.com/reazon-research/ReazonSpeech/2d4d4762e7ee294ac8e47a177ac2e9b0e8d0d43f/pkg/k2-asr/src/audio.py"
+    }
+  ],
+  "speech_control": {
+    "id": 1828,
+    "audio_path": "/home/psikosen/JREAD/tests/fixtures/japanese-speech.wav",
+    "audio_sha256": "26b6cd491b5d52cf05d89207cb88499cdaba89749aebc29c8f216e834e3d9071",
+    "duration_seconds": 10.44,
+    "reference": "インターネットで「敵対的環境コース」について検索すると、おそらく現地企業の住所が出てくるでしょう。",
+    "essential_meaning": [
+      "Searching the Internet for hostile environment courses.",
+      "Addresses of local companies will probably appear."
+    ]
+  },
+  "silence_seconds": 8,
+  "readiness_review": {
+    "path": "/home/psikosen/JREAD/test-results/reazon-readiness-review.json",
+    "sha256": "df4b27e1e887cb5129e39ab7d2f1a52feb7779c8bfe446ee88bb6e884cb2b0e4"
+  },
+  "readiness_rule": "Separate fixture1828 must yield Japanese preserving both essential propositions with normalizedCER<=0.25, and8s zeroPCM must yield empty strippedtext. No parameter tuning or retries; root reviews actual output before development. Readiness is not benchmark accuracy.",
+  "translation_settings": {
+    "preset": "gemma4",
+    "device": "CPU",
+    "threads": 8,
+    "context_tokens": 4096,
+    "port": 18767,
+    "temperature": 0,
+    "seed": null,
+    "max_tokens": 1024,
+    "thinking": false
+  },
+  "translation_rule": "Unchanged original E4B CPU8 temp0 thinkingoff, no context/glossary/punctuation repair. Exactlyone whole-clip source percase. Exact original-prompt matches reuse saved baseline/pristine output and historicalcost. All20 in denominator. Cachelookup uses only generatedASR text; no reference enters a request.",
+  "review_rule": "Freeze existing Japanese-authoritative rubric. Independently review all20 outputs; exact existing grades retained as primary with separate fresh-review sensitivity. Report actual selected accuracy, fixes, regressions and sequentialcost against13/20 deterministic and14/20 sampled historicalbest. No selector and no production promotion.",
+  "outputs": {
+    "smoke": "/home/psikosen/JREAD/test-results/reazon-readiness.json",
+    "asr": "/home/psikosen/JREAD/test-results/accuracy-reazon-asr-development.json",
+    "translate": "/home/psikosen/JREAD/test-results/accuracy-reazon-translation-development.json"
+  },
+  "limits": [
+    "No original50 heldout. All sourceframes retained.29.52s longestclip becomes31.32s withofficialpadding; upstream30s advice is a memory caution, not a truncation rule.",
+    "EOF-only recognition; not a live streaming latency comparison. NewASR CPU4 versus previousWhisperCUDA, translatorCPU8 matched.",
+    "One separate speechfixture used again only for excluded ASR warmup; no development ASR retries.",
+    "Readiness failed on one speech term and hallucinated yes on silence; result cannot qualify for production even if its development score improves."
+  ],
+  "root_review": "CPUselftest and input/runtime/model hash validation passed; prior20-denominator and parentfailure persistence issues fixed. Frozen failed gate explicitly retained; no silent pass override. All20 errorcases kept. OriginalGemma request settings and no reference in requests.",
+  "preflight_note": "First CPU validation caught the staging marker key=value layout; reader corrected before any model load or output creation.",
+  "stage_scope": "offline development diagnostic after failed readiness",
+  "frozen_at_utc": "2026-10-04T21:25:43.402974+00:00",
+  "failed_readiness_diagnostic": true,
+  "readiness_protocol": {
+    "path": "/home/psikosen/JREAD/tests/fixtures/accuracy-reazon-readiness.json",
+    "sha256": "34f82bf4e89230b6ed45d1a5a16d8146c09fdbf86aca1f745b61341529d51ef3"
+  },
+  "readiness_runner_snapshot": {
+    "path": "/media/psikosen/newvolume/jread-reazon/data/evaluate_reazon-readiness-v1.py",
+    "sha256": "b0d439d6bd28727b89205c944dd316abfe4d1f5857242233d69a1ea46076c174"
+  },
+  "followup_reason": "The existing all-pass readiness gate failed and remains failed. The user authorized Reazon→sameGemma on all20; this separate prospective diagnostic measures whether errors differ despite failedcontrols. It carries no productioneligibility. No settings, cases, rubric or controls adjusted to improve the result."
+}

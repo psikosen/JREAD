@@ -1,0 +1,21 @@
+[package]
+name = "jread-desktop"
+version = "0.1.0"
+edition = "2021"
+build = "build.rs"
+
+[dependencies]
+serde_json = "1"
+tauri = { version = "2", features = [] }
+url = "2"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[[bin]]
+name = "jread-desktop"
+path = "src/main.rs"
+
+[[bin]]
+name = "jread-native-host"
+path = "src/bin/native_host.rs"

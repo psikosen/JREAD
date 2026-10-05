@@ -1,0 +1,229 @@
+{
+  "version": 1,
+  "corpus": "tests/fixtures/accuracy-corpus.json",
+  "partition": "development",
+  "case_count": 20,
+  "purpose": "Frozen qualitative review aid for the development partition only. It is not a score, automatic ground truth, or human-certified evaluation.",
+  "authority": {
+    "semantic_source": "japanese_reference",
+    "english_reference_use": "Guide to likely intended English phrasing; it must not overrule the Japanese reference. Discrepancies are listed per case.",
+    "paraphrase_policy": "Natural English paraphrases are acceptable when they preserve all required propositions and constraints. Minor style differences do not fail a case."
+  },
+  "global_pass_rule": "A case passes only when every major proposition is preserved, no required entity or number is materially changed, polarity and agent/participant roles remain correct, and no unsupported fact is added. Missing output, an error, or missing captions fails. Do not average away a failed major proposition.",
+  "review_schema": {
+    "proposition_status": ["preserved", "missing", "contradicted", "unclear"],
+    "constraint_status": ["pass", "fail", "unclear"],
+    "case_status": ["pass", "fail", "unclear"],
+    "required_evidence": "For each non-pass judgment, record a short exact span from the Japanese reference and/or English output. Mark unclear rather than guessing.",
+    "stage_attribution": {
+      "values": ["speech_recognition", "translation", "both", "uncertain"],
+      "method": "First compare the Japanese ASR transcript with the Japanese reference. If it drops or changes a proposition, entity, number, agent, or polarity, attribute that source mismatch to speech_recognition. Then compare the English caption with the Japanese transcript and reference: if the transcript preserves the content but English drops, changes, or invents it, attribute that mismatch to translation. If both stages contribute, use both. If the available outputs cannot isolate the cause, use uncertain. A faithfully translated ASR error remains a source-stage error, while the user-visible end-to-end case can still fail."
+    },
+    "model_assistance_note": "Later model-assisted reviews are provisional judgments against these criteria, not human certification."
+  },
+  "cases": [
+    {
+      "id": 1632,
+      "required_propositions": [
+        "Women should recognize that cultural differences may lead to conduct called harassment.",
+        "Being followed is not uncommon.",
+        "Being grabbed by the arm is not uncommon; these are examples, not an exhaustive list."
+      ],
+      "required_entities": [],
+      "numbers_dates": [],
+      "polarity_agent_constraints": ["Keep the advice directed to women.", "Preserve the negative-frequency sense: these incidents are not uncommon."],
+      "guide_discrepancies": ["The English guide says ‘what they would consider harassment’; the Japanese says conduct called harassment and does not clearly state that women themselves define it."],
+      "reference_caveats": ["The Japanese contains an apparent typo in ながりうる; read it as a possible connection/result, consistent with the English guide."]
+    },
+    {
+      "id": 1638,
+      "required_propositions": [
+        "Safaris are perhaps the greatest tourism attraction/draw in Africa.",
+        "They are a highlight for many tourists/visitors."
+      ],
+      "required_entities": ["Africa", "safaris"],
+      "numbers_dates": [],
+      "polarity_agent_constraints": ["Preserve the hedge ‘perhaps/probably’; do not make the ranking certain."],
+      "guide_discrepancies": [],
+      "reference_caveats": []
+    },
+    {
+      "id": 1604,
+      "required_propositions": [
+        "An unstated male subject, serving as NSA, assisted Carter in diplomatically handling world affairs.",
+        "Examples include the 1978 Camp David Accords and normalization of U.S.–China relations in the late 1970s.",
+        "The Iranian Revolution led to the 1979 Iran hostage crisis.",
+        "The Soviet invasion of Afghanistan occurred in 1979."
+      ],
+      "required_entities": ["Carter", "Camp David Accords", "United States–China relations", "Iranian Revolution", "Iran hostage crisis", "Soviet Union", "Afghanistan"],
+      "numbers_dates": ["1978: Camp David Accords", "late 1970s: U.S.–China normalization", "1979: Iran hostage crisis following the Iranian Revolution", "1979: Soviet invasion of Afghanistan"],
+      "polarity_agent_constraints": ["Keep the Revolution as the cause/precursor of the hostage crisis; do not reverse the relation."],
+      "guide_discrepancies": ["The English guide has the typo ‘thought the late 1970s’; interpret it as ‘through the late 1970s’."],
+      "reference_caveats": ["Do not infer the unnamed subject's identity beyond the Japanese text."]
+    },
+    {
+      "id": 1607,
+      "required_propositions": ["It is worthwhile to stroll around an intriguing/interesting village for about half an hour."],
+      "required_entities": ["village"],
+      "numbers_dates": ["Approximately 30 minutes"],
+      "polarity_agent_constraints": [],
+      "guide_discrepancies": [],
+      "reference_caveats": ["The duration is approximate, not exact."]
+    },
+    {
+      "id": 1641,
+      "required_propositions": [
+        "The forest is not merely a mangrove swamp.",
+        "It includes some of the last places/stands where a vast jungle remains.",
+        "That jungle once covered the Hindustan Plain."
+      ],
+      "required_entities": ["mangroves", "Hindustan Plain"],
+      "numbers_dates": [],
+      "polarity_agent_constraints": ["Preserve the contrast/negation: the forest is more than mangrove swamp."],
+      "guide_discrepancies": ["The English guide says ‘Gangetic plain’, while the Japanese explicitly says ヒンドゥスターン平野 (Hindustan Plain). Follow the Japanese reference and flag any output that substitutes the guide's geography."],
+      "reference_caveats": []
+    },
+    {
+      "id": 1569,
+      "required_propositions": ["The report opens with a passage pleading for open/public debate and for building consensus in the United States about Middle East policy."],
+      "required_entities": ["the report", "United States", "Middle East policy"],
+      "numbers_dates": [],
+      "polarity_agent_constraints": ["The passage is a plea/appeal; do not turn it into a completed policy decision."],
+      "guide_discrepancies": [],
+      "reference_caveats": []
+    },
+    {
+      "id": 1571,
+      "required_propositions": ["The Arabs also brought Islam to this land/region.", "Islam was widely accepted in the Comoros and Mayotte."],
+      "required_entities": ["Arabs", "Islam", "Comoros", "Mayotte"],
+      "numbers_dates": [],
+      "polarity_agent_constraints": ["The Arabs bring Islam; the people/places receive or accept it."],
+      "guide_discrepancies": ["The English guide's phrase ‘it took in a big way’ is awkward; the Japanese explicitly means wide acceptance in the Comoros and Mayotte."],
+      "reference_caveats": ["The antecedent/location of この地 (‘this land’) is not specified here; do not invent one."]
+    },
+    {
+      "id": 1514,
+      "required_propositions": [
+        "The wounded were transported to a hospital, after which the fighting ceased.",
+        "About 40 other prisoners remained in the courtyard.",
+        "They refused to return to their cells."
+      ],
+      "required_entities": ["wounded people", "prisoners", "courtyard", "cells"],
+      "numbers_dates": ["About 40 prisoners"],
+      "polarity_agent_constraints": ["Keep the prisoners as the people who remained and refused; preserve the refusal."],
+      "guide_discrepancies": [],
+      "reference_caveats": []
+    },
+    {
+      "id": 1592,
+      "required_propositions": [
+        "For a first trip abroad, people around the traveler will probably respond patiently and with understanding.",
+        "They know travelers need time to adjust/become accustomed to a new place."
+      ],
+      "required_entities": ["traveler", "people around the traveler"],
+      "numbers_dates": [],
+      "polarity_agent_constraints": ["Keep this as a probable/general expectation, not a definite past event."],
+      "guide_discrepancies": ["The English guide uses past-tense ‘When you went abroad at first’; the Japanese 初めての海外旅行なら…でしょう is conditional/prospective and probabilistic."],
+      "reference_caveats": []
+    },
+    {
+      "id": 1559,
+      "required_propositions": ["Italian pronunciation is relatively easy because most words are pronounced as written/literally."],
+      "required_entities": ["Italian"],
+      "numbers_dates": [],
+      "polarity_agent_constraints": [],
+      "guide_discrepancies": [],
+      "reference_caveats": ["‘As written’ is the intended sense of 文字通り here; do not require the English guide's exact wording."]
+    },
+    {
+      "id": 1643,
+      "required_propositions": ["The park covers an area of 19,500 square kilometres.", "It is divided into 14 ecological zones.", "Each zone supports different wildlife."],
+      "required_entities": ["park", "ecological zones", "wildlife"],
+      "numbers_dates": ["19,500 km²", "14 zones"],
+      "polarity_agent_constraints": ["Do not change the area or zone count."],
+      "guide_discrepancies": [],
+      "reference_caveats": ["Equivalent unit formatting such as 19,500 km2 is acceptable."]
+    },
+    {
+      "id": 1639,
+      "required_propositions": ["Students are often the most critical readers/audience.", "For that reason, blog writers begin trying to improve their writing in order to avoid criticism."],
+      "required_entities": ["students", "blog writers"],
+      "numbers_dates": [],
+      "polarity_agent_constraints": ["Keep the causal link and the writers' purpose of avoiding criticism."],
+      "guide_discrepancies": [],
+      "reference_caveats": ["A singular or plural rendering of ブログの書き手 is acceptable if the general claim remains."]
+    },
+    {
+      "id": 1539,
+      "required_propositions": ["Subculture members often signal that they belong through a distinctive, symbolic style.", "The style includes fashion, mannerisms, and slang/argot."],
+      "required_entities": ["subculture members"],
+      "numbers_dates": [],
+      "polarity_agent_constraints": ["Keep the members as the people signaling membership; retain all three examples."],
+      "guide_discrepancies": [],
+      "reference_caveats": ["マンネリズム is intended as mannerisms in this list; do not translate it as repetitive stagnation."]
+    },
+    {
+      "id": 1649,
+      "required_propositions": ["The first cherry-blossom viewing/party in Japan was hosted by the emperor.", "It was exclusively for the emperor and aristocrats living around the Imperial Court."],
+      "required_entities": ["Japan", "emperor", "aristocrats", "Imperial Court"],
+      "numbers_dates": [],
+      "polarity_agent_constraints": ["Preserve the exclusivity (‘only for’); do not imply the public attended."],
+      "guide_discrepancies": [],
+      "reference_caveats": ["花見 may be rendered as cherry-blossom viewing or a cherry-blossom party."]
+    },
+    {
+      "id": 1517,
+      "required_propositions": ["AI research involves making machines that automate tasks requiring intelligent behavior."],
+      "required_entities": ["AI research", "machines"],
+      "numbers_dates": [],
+      "polarity_agent_constraints": ["Machines automate the tasks; do not claim AI research itself is only automation."],
+      "guide_discrepancies": [],
+      "reference_caveats": []
+    },
+    {
+      "id": 1627,
+      "required_propositions": ["Ancient Roman meals could not have included ingredients that arrived in Europe from America or Asia in later centuries."],
+      "required_entities": ["ancient Romans", "Europe", "America", "Asia"],
+      "numbers_dates": ["Later centuries, after the ancient Roman period"],
+      "polarity_agent_constraints": ["Critical: preserve the impossibility/negation and the later-arrival time relation."],
+      "guide_discrepancies": [],
+      "reference_caveats": ["No specific ingredient or arrival century is named; do not add one."]
+    },
+    {
+      "id": 1622,
+      "required_propositions": ["U.S. President George W. Bush welcomed the announcement."],
+      "required_entities": ["George W. Bush", "announcement"],
+      "numbers_dates": [],
+      "polarity_agent_constraints": ["Bush is the person who welcomed it; preserve the positive response."],
+      "guide_discrepancies": [],
+      "reference_caveats": ["The announcement's content is not specified; do not invent it."]
+    },
+    {
+      "id": 1562,
+      "required_propositions": ["The previously described practice became common.", "Iron caused increased wear on the wooden wheels of wagons."],
+      "required_entities": ["iron", "wooden wagon wheels"],
+      "numbers_dates": [],
+      "polarity_agent_constraints": ["Preserve the contrast introduced by ですが (‘but’). Iron causes the wear; do not reverse cause and effect."],
+      "guide_discrepancies": [],
+      "reference_caveats": ["これ (‘this’) refers to information outside this sentence; keep it generic and do not invent the practice."]
+    },
+    {
+      "id": 1636,
+      "required_propositions": ["The Spanish colonial period began.", "It lasted/was to last three centuries."],
+      "required_entities": ["Spaniards", "colonial period"],
+      "numbers_dates": ["Three centuries"],
+      "polarity_agent_constraints": ["Keep the duration attached to the colonial period."],
+      "guide_discrepancies": [],
+      "reference_caveats": ["The Japanese has a grammatical typo around 続きこと; the English guide confirms the intended ‘lasted three centuries’ meaning."]
+    },
+    {
+      "id": 1647,
+      "required_propositions": ["The views presented are often cursory/superficial, general or rough, and oversimplified.", "They are so compared with more detailed information available elsewhere."],
+      "required_entities": ["the views presented", "more detailed information elsewhere"],
+      "numbers_dates": [],
+      "polarity_agent_constraints": ["Preserve the comparison and the negative criticism of the views."],
+      "guide_discrepancies": [],
+      "reference_caveats": ["Natural paraphrase is acceptable; do not require the exact three English adjectives if the shallow, general, oversimplified meaning is retained."]
+    }
+  ]
+}

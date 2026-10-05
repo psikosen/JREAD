@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JREAD captions</title><link rel="stylesheet" href="popup.css"></head>
+<body>
+  <header><div class="mark" aria-hidden="true">字</div><div><h1>JREAD</h1><p>Local audio. Readable stories.</p></div><span id="connection" class="pill">Not paired</span></header>
+  <main>
+    <p id="message" role="status" aria-live="polite">Choose a video, then apply a track or start live captions.</p>
+    <section aria-labelledby="setup-heading"><div class="section-heading"><h2 id="setup-heading">Companion</h2><button id="launch" class="small">Open companion</button></div>
+      <p id="engine" class="muted">Pair using the code shown in your local companion.</p>
+      <form id="pair-form"><label for="pair-code">Pairing code</label><div class="row"><input id="pair-code" autocomplete="off" maxlength="16" placeholder="Code from companion" required><button type="submit">Pair</button></div></form>
+      <p class="fine">Pairing lasts up to 24 hours and ends when the browser exits. Recognition stays on this computer.</p>
+    </section>
+    <section aria-labelledby="player-heading"><div class="section-heading"><h2 id="player-heading">1 · Select a player</h2><button id="scan" class="small">Refresh players</button></div>
+      <label for="videos">Accessible HTML5 videos</label><select id="videos"><option value="">Looking for players…</option></select>
+      <p id="capability" class="muted"></p>
+      <div id="frame-permission" hidden><label for="origins">Blocked frame origin</label><div class="row"><select id="origins"></select><button id="grant">Allow origin</button></div><p class="fine">Grants access only to this origin. Closed shadow players and protected browser pages are unsupported.</p></div>
+      <div id="existing-wrap" hidden><label for="existing">Existing player subtitles</label><div class="row"><select id="existing"></select><button id="use-existing">Use track</button></div></div>
+    </section>
+    <section aria-labelledby="track-heading"><div class="section-heading"><h2 id="track-heading">2 · Reuse a saved track</h2><button id="refresh-library" class="small">Refresh library</button></div>
+      <label for="jobs">Companion library</label><select id="jobs"><option value="">Pair to load tracks</option></select>
+      <label class="check"><input id="matched" type="checkbox">I matched this track to the selected episode and audio.</label>
+      <button id="apply" class="primary">Apply timed subtitles</button>
+      <label for="import">Or import an SRT / WebVTT track</label><input id="import" type="file" accept=".srt,.vtt">
+      <p class="fine">Generate ahead from a local media file in the companion. Websites do not automatically grant access to a full episode.</p>
+    </section>
+    <section aria-labelledby="live-heading"><h2 id="live-heading">Or listen as it plays</h2><p class="muted">Captions in English, with a delay. Captures all audio in this tab, including ads and other players. Only speech actually played can be captioned.</p>
+      <label for="source-language">Spoken language</label><select id="source-language"></select><p class="fine">Choose the language you hear; automatic detection is off. Stop capture before changing languages. English audio is captioned directly.</p>
+      <p id="live-state" role="status">Capture is off.</p><div class="row"><button id="start" class="primary">Start live captions</button><button id="stop" disabled>Stop capture</button></div>
+    </section>
+    <details><summary>Caption appearance</summary><div class="style-grid"><label for="font-size">Font size (px)</label><input id="font-size" type="number" min="14" max="60" value="28"><label for="position">Position (% from top)</label><input id="position" type="number" min="10" max="95" value="90"></div><label class="check"><input id="background" type="checkbox" checked>Dark background</label><label class="check"><input id="outline" type="checkbox" checked>Text outline</label><label class="check"><input id="japanese" type="checkbox">Original language line, when the track includes it</label><button id="save-style">Save appearance</button><p class="fine">Native video tracks follow pause, seek, speed and supported fullscreen players. Your browser controls line wrapping.</p></details>
+    <button id="clear" class="quiet">Remove JREAD captions</button>
+    <p class="fine">Prototype · Chromium / Brave 116+. Picture-in-picture, DRM capture and every website are not verified.</p>
+  </main><script src="dist/popup.js"></script>
+</body></html>

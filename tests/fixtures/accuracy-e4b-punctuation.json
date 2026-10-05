@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "frozen",
+  "partition": "development",
+  "case_count": 20,
+  "purpose": "Offline punctuation-only Japanese source restoration followed by the original E4B translator, reusing only the validated safe20 development cases.",
+  "runner_sha256": "fa9cc5c675fdfc7d0558d6fa1afa8a3f1996a050b21b8b10d8474cced1999a32",
+  "helpers": {
+    "ensemble": {
+      "path": "/home/psikosen/JREAD/tests/evaluate_translation_ensemble.py",
+      "sha256": "92b431bab0ea6d5bcabfa51c301135c3ce27e560d0ecdca8affbdb73ef8aff05"
+    },
+    "streaming_combinations": {
+      "path": "/home/psikosen/JREAD/tests/evaluate_streaming_combinations.py",
+      "sha256": "23de767fb83a05ea36712fe76ea370eabf08dbfd8dce8c68404bc84ccbd5a94c"
+    },
+    "streaming_translation": {
+      "path": "/home/psikosen/JREAD/tests/evaluate_streaming_translation.py",
+      "sha256": "75c275d79898aa0eb28aca0c964cfb3f8e278f1d02ae982a44b949c22fce355c"
+    },
+    "translation": {
+      "path": "/home/psikosen/JREAD/tests/evaluate_translation.py",
+      "sha256": "5d10fd2cee5e89191b6d0e4eeb3c7876f3b4674fd005d09e155892991e629582"
+    },
+    "gemma": {
+      "path": "/home/psikosen/JREAD/jread/gemma.py",
+      "sha256": "82c500f169e26b7e8d53df874fcb3b091d095a6bc9e5c3957f67d4ce05491b49"
+    },
+    "wording_runner": {
+      "path": "/home/psikosen/JREAD/tests/evaluate_e4b_text_wording.py",
+      "sha256": "654cc6b328287076d57c8c41039c4863db8024d563a2d6a3658de0129e1d8e72"
+    }
+  },
+  "inputs": {
+    "source": {
+      "path": "/media/psikosen/newvolume/jread-translategemma/data/development-inputs-v1.jsonl",
+      "sha256": "5d94cff95cab0fcb78233dc4015f49de3683095144dada8e548ae02d984f964d"
+    },
+    "baseline": {
+      "path": "/home/psikosen/JREAD/test-results/accuracy-streaming-turbo-none-translation-development.json",
+      "sha256": "28cf97210dab5ff277d00eb01c0dca4567df1f170c1b1a53bb281fbf84a034d8"
+    },
+    "review_only": {
+      "path": "/media/psikosen/newvolume/jread-translategemma/data/development-review-only-v1.json",
+      "sha256": "8ae4d4db4f6f9847adcdc0e340034f5b98509a50eb4cd1e65b4ebeb50c2d3e3a"
+    },
+    "rubric": {
+      "path": "/home/psikosen/JREAD/tests/fixtures/accuracy-development-rubric.json",
+      "sha256": "ce7514d3e12dded03e3c2ce0894cb0e3750720d0034aec0f63d45256cf3a89e9"
+    }
+  },
+  "parent_protocol_path": "/home/psikosen/JREAD/tests/fixtures/accuracy-e4b-text-wording.json",
+  "parent_protocol_sha256": "fc7c95a08c72b2de804be19b4b9cd11c69fea6528b40a3df13fd4bdd3396f956",
+  "stage1_punctuation": "、。",
+  "stage1_integrity": "Delete only 、 and 。 from source and candidate and require exact remaining-string equality; every other code point including whitespace is invariant.",
+  "controls": [
+    {
+      "id": "name",
+      "source": "佐藤さんは田中さんに会いました"
+    },
+    {
+      "id": "negation",
+      "source": "私は行くと言っていません"
+    },
+    {
+      "id": "number",
+      "source": "会議は3時15分に始まります"
+    },
+    {
+      "id": "quoted_instruction",
+      "source": "「ドアを開けて」と彼女は言いました"
+    }
+  ],
+  "settings": {
+    "preset": "gemma4",
+    "device": "CPU",
+    "threads": 8,
+    "context_tokens": 4096,
+    "port": 18767,
+    "temperature": 0,
+    "seed": null,
+    "max_tokens": 1024,
+    "thinking": false
+  },
+  "ports_checked": [
+    18767,
+    18768
+  ],
+  "warmup_source": {
+    "start": 0,
+    "end": 1,
+    "text": "こんにちは。"
+  },
+  "failure_policy": "All four invented technical controls must return strict valid stage1 output with punctuation-only invariance. Any failure blocks development cases and leaves all20 pending. Stage1 case errors or invalid invariance reuse exact baseline without a stage2 rerun; valid byte-identical sources also reuse baseline. Changed accepted source gets one original-prompt translation; stage2 errors remain failures without retry.",
+  "review_policy": "No rubric, reference, or grade in model requests. Independent meaning review uses the unchanged frozen rubric; exact reused outputs may reuse frozen grades. Same-decoding baseline is 13 passes; separately report historical best sampled 14; no production promotion. Candidate merits fresh validation only if it beats13 with zero baseline-pass regressions; more than14 needed to exceed historical best.",
+  "timing_policy": "Sequential CPU8; controls/startup/warmup excluded. Fallback/unchanged cost includes stage1 plus historical measured baseline. Exact pristine-cache hit includes stage1 plus historical translation timing. Otherwise cost is stage1 plus new stage2. No live-speed estimate.",
+  "output_path": "/home/psikosen/JREAD/test-results/accuracy-e4b-punctuation-development.json",
+  "pristine_reference": {
+    "path": "/home/psikosen/JREAD/test-results/accuracy-translation-development.json",
+    "sha256": "8a48542ea0c8b7d8ca59c25bf06c12fc759c4f2daa67731f6b2bca08673ae53f"
+  },
+  "frozen_at_utc": "2026-10-04T20:53:41.502716+00:00",
+  "root_review": "Complete: source-only messages; exact punctuation invariant; original translator and exact-request cache validation; all20 denominator; no retries; owned cleanup; model-start-forbidden CPU self-test passed."
+}

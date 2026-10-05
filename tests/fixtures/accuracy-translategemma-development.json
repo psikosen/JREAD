@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "status": "draft",
+  "stage": "development",
+  "runner_sha256": "dee8724b8d4571edeff0ecb3276d0095155c8e07ef3c3e1f9f6244c3eac6908b",
+  "runtime_manifest_sha256": "61fdaa94588877d63d48f00bc3a80e86f4c79d023c7dbaf2c075ae6aee1c5521",
+  "helper_sha256": {
+    "pilot": "4f08756bcab33c873b0068a3ebcbb1458a43fbb79114e0cd6e02bc643dbabf68",
+    "audio_readiness": "ebed0dbc34a01181314cd3bcac8cb209879f7a3ccc853ef54477af377aa62136"
+  },
+  "model": {
+    "directory": "/media/psikosen/newvolume/jread-translategemma/model",
+    "repo_id": "google/translategemma-4b-it",
+    "revision": "10042cb0e6e7fdce748996a71dc3dc432a4e0c89",
+    "provenance_sha256": "cb31577c511a469cf0f5db5ac7633b6ed408e744f1bd66c6c46ff3c1f95f1993"
+  },
+  "input_manifest": {
+    "path": "/media/psikosen/newvolume/jread-translategemma/data/input-manifest-v1.json",
+    "sha256": "d90cb4ef6971afed78dbb8584b5fe8c54cd3133c39574d2dccd5146ed03c1e14"
+  },
+  "data": {
+    "path": "/media/psikosen/newvolume/jread-translategemma/data/development-inputs-v1.jsonl",
+    "sha256": "5d94cff95cab0fcb78233dc4015f49de3683095144dada8e548ae02d984f964d",
+    "expected_ids": [
+      "fleurs-dev-1632",
+      "fleurs-dev-1638",
+      "fleurs-dev-1604",
+      "fleurs-dev-1607",
+      "fleurs-dev-1641",
+      "fleurs-dev-1569",
+      "fleurs-dev-1571",
+      "fleurs-dev-1514",
+      "fleurs-dev-1592",
+      "fleurs-dev-1559",
+      "fleurs-dev-1643",
+      "fleurs-dev-1639",
+      "fleurs-dev-1539",
+      "fleurs-dev-1649",
+      "fleurs-dev-1517",
+      "fleurs-dev-1627",
+      "fleurs-dev-1622",
+      "fleurs-dev-1562",
+      "fleurs-dev-1636",
+      "fleurs-dev-1647"
+    ]
+  },
+  "generation": {
+    "do_sample": false,
+    "temperature": 0,
+    "seed": 17,
+    "num_beams": 1,
+    "max_new_tokens": 256
+  },
+  "readiness_gate": null,
+  "quality_gate": {
+    "rubric": {
+      "path": "/home/psikosen/JREAD/tests/fixtures/accuracy-development-rubric.json",
+      "sha256": "ce7514d3e12dded03e3c2ce0894cb0e3750720d0034aec0f63d45256cf3a89e9"
+    },
+    "rule": "Unchanged whole-case development rubric; all20 retained. Readiness meaning gate must be added before GPU."
+  },
+  "limits": [
+    "Readiness controls first; root technical review and protocol freeze required before GPU.",
+    "Separate root/independent meaning review before development, preserve all unsuccessful output.",
+    "Translation-only challenger on identical saved sources; no original50 heldout, model tuning or production change.",
+    "Anime capture pending source identification; new window frozen before model outputs.",
+    "GPU BF16 challenger timing cannot establish speedup over historical CPU Q4 E4B baseline."
+  ],
+  "implementation_limits": {
+    "max_input_tokens": 1792,
+    "maximum_new_tokens": 256,
+    "dtype": "bfloat16",
+    "attention": "sdpa",
+    "quantization": null,
+    "cpu_threads": 4,
+    "minimum_free_gpu_mib": 16000,
+    "owned_lock": "/media/psikosen/newvolume/jread-finetune/runtime/audio-readiness.lock"
+  }
+}

@@ -1,0 +1,86 @@
+[
+  {
+    "id": "omitted_subject_guide",
+    "previous_source": "案内係は客に地図を渡した。",
+    "current_source": "続いて、駅までの道順を説明した。",
+    "required_meaning": [
+      "Next, the guide explained the route to the station.",
+      "The omitted subject continues to be the guide; a name, pronoun, or natural passive rendering is acceptable if it does not change the agent."
+    ],
+    "forbidden_inferences": [
+      "The customer explained the route to the guide.",
+      "The narrator or an invented person explained the route.",
+      "Repeating the earlier map-giving event as an additional translated sentence."
+    ]
+  },
+  {
+    "id": "omitted_object_broken_plate",
+    "previous_source": "店員は割れた皿を箱から取り出した。",
+    "current_source": "けがをしないように、新聞紙で丁寧に包んだ。",
+    "required_meaning": [
+      "The clerk carefully wrapped the broken plate in newspaper to avoid injury.",
+      "The omitted wrapped object is the plate, not the box; referring to it as 'it' is acceptable."
+    ],
+    "forbidden_inferences": [
+      "The clerk wrapped the box or a person instead of the plate.",
+      "Someone was actually injured or the plate was broken during wrapping.",
+      "Repeating the earlier removal from the box as another translated event."
+    ]
+  },
+  {
+    "id": "explicit_speaker_change",
+    "previous_source": "姉は「私はもう昼食を食べた」と言った。",
+    "current_source": "弟は「僕はまだ食べていない」と答えた。",
+    "required_meaning": [
+      "The younger brother replied that he had not eaten yet.",
+      "First-person wording inside the brother's quotation is acceptable; the sister's earlier statement must not become his statement."
+    ],
+    "forbidden_inferences": [
+      "The brother has already eaten.",
+      "The sister is the person replying that she has not eaten yet.",
+      "Repeating the sister's earlier statement as part of the current translation."
+    ]
+  },
+  {
+    "id": "current_negation_overrides_prior_claim",
+    "previous_source": "責任者は、明日の会議は中止だと発表した。",
+    "current_source": "その後、訂正があり、会議は中止ではなく延期だと分かった。",
+    "required_meaning": [
+      "After a correction, it became clear that the meeting was postponed, not cancelled.",
+      "The current correction overrides the earlier cancellation claim; retain the distinction between postponement and cancellation."
+    ],
+    "forbidden_inferences": [
+      "The meeting is still cancelled, or was cancelled rather than postponed.",
+      "The meeting is both cancelled and postponed as the current conclusion.",
+      "An invented replacement date or a claim about who made the correction."
+    ]
+  },
+  {
+    "id": "unrelated_context_entity_leakage",
+    "previous_source": "優子は京都で看護師として働いている。",
+    "current_source": "一方、別の町では、一人の男性がバスを待っている。",
+    "required_meaning": [
+      "Meanwhile, a man is waiting for a bus in another town.",
+      "The man remains unnamed and his occupation is unspecified; the other town is not named."
+    ],
+    "forbidden_inferences": [
+      "The waiting man is Yuko or is a nurse.",
+      "The current town is Kyoto, Tokyo, or another invented named place.",
+      "Repeating Yuko's employment in Kyoto as an additional translated sentence."
+    ]
+  },
+  {
+    "id": "new_recording_empty_context",
+    "previous_source": "",
+    "current_source": "この部屋には窓が二つある。",
+    "required_meaning": [
+      "This room has two windows.",
+      "This is a new recording with no preceding source context; only the current sentence is translated."
+    ],
+    "forbidden_inferences": [
+      "The room belongs to Yuko, a nurse, the guide, the clerk, or another invented person.",
+      "The room is in Kyoto or in the town from an earlier control.",
+      "Any additional event or attribution carried over from another recording, or any number other than two windows."
+    ]
+  }
+]

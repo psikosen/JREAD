@@ -1,0 +1,851 @@
+ AI Subs
+ Polished release project plan
+
+ Working product name: AI Subs
+ Prepared: October 2, 2026
+ Status: Proposed specification; performance targets are not measured results.
+ Primary reference machine: Linux, RTX 5090 with 32 GB VRAM, 128 GB system RAM.
+ Secondary target: Apple Silicon Mac with M4 and 128 GB unified memory, after its inference
+ backend passes a separate validation gate.
+
+ Product outcome
+ Open a video without useful subtitles, click Generate subtitles, and receive readable Japanese-
+ to-English captions in the browser, including supported fullscreen players. Speech recognition and
+ translation run on the user’s computer. A local companion handles models, installation, job
+ recovery, and the subtitle library. No cloud inference is required.
+
+ The polished product is a Chrome extension plus a desktop companion, not a heavyweight
+ model running inside the extension.
+
+ The most important correction
+ Fast whole-episode generation and live tab capture are different products paths.
+ Chrome tab capture provides the tab’s playing audio stream; it does not expose future audio or a
+ downloadable copy of the episode. At normal playback speed, capturing an entire 25-minute
+ episode takes approximately 25 minutes, even when inference is faster than real time. [S1]
+
+ The earlier 1-3-minute episode estimate is therefore an unverified optimization target for a
+ fully accessible source, not a promise for arbitrary streaming websites. This project includes
+ both paths and clearly tells users which one is available.
+
+   Mode                             Input                                 User experience
+
+   Generate ahead                   Local media or an explicitly          Process faster than playback when the
+                                    supported, accessible full source     hardware and pipeline allow; watch with
+                                                                          timed captions.
+
+   Live captions                    Audio captured from the playing tab   Captions arrive after speech; cannot subtitle
+                                                                          unseen future audio.
+
+   Reuse or translate a             Matching cached subtitles or an       Avoid recognition; reuse immediately or
+   track                            accessible existing text track        translate the text.
+
+
+ Release boundaries
+ Ship Japanese-to-English first. Support one active capture session, a documented browser/player
+ matrix, editable subtitles, caching, export, and a no-terminal setup flow. Defer universal website
+ support, DRM workarounds, automatic character identity, dubbing, lyric-perfect karaoke, on-screen
+ text OCR, and mobile browsers.
+
+
+
+
+02 OCT 2026 | Performance targets require validation                                                                      1
+AI SUBS / PRODUCT & ENGINEERING                                                                          PROPOSED RELEASE PLAN
+
+
+
+ First decision gate: prove source access, subtitle timing, and end-to-end quality before
+ investing in elaborate UI or promising processing speed.
+
+
+ 1. Product experience and release scope
+
+ First-run experience
+ The user installs the extension and companion. Setup detects the inference device, checks free
+ disk space and supported runtime versions, offers a tested model preset, obtains any required
+ model-license acceptance, and downloads verified model files. A short included test clip confirms
+ audio, inference, and captions. Explain the initial download separately from subsequent offline
+ use.
+
+ No command-line setup, manual Python installation, or pasted API key should be necessary for the
+ supported release configuration. Unsupported hardware receives a specific explanation rather
+ than an endless loading spinner.
+
+ Watching an episode
+ Clicking the extension starts a capability check, not silent recording. The extension identifies
+ candidate video elements, lets the user select one when necessary, checks for existing usable
+ subtitles, and reports one of three clear states: Generate ahead available, Live captions
+ available, or Player unsupported.
+
+ Generate-ahead mode displays preparation, recognition, translation, and timing progress
+ separately. Playback can begin when an initial contiguous range is ready; the interface shows that
+ range and prioritizes work near the playhead. Full completion remains available before playback.
+ Live mode asks the user to play the episode and explicitly describes caption delay.
+
+ Polished controls
+
+   Area                                   Required behavior
+
+   Caption appearance                     Font size, outline/background, vertical position, two-line layout, safe margins,
+                                          and optional Japanese line.
+
+   Playback                               Correct pause, seek, replay, playback-rate changes, episode changes, and
+                                          supported fullscreen transitions.
+
+   Correction                             Edit a cue, undo edits, rerun recognition or translation for a selected span, and
+                                          adjust an approved glossary.
+
+   Library                                Search local episodes, view coverage, resume jobs, export SRT/WebVTT, import
+                                          an existing track, and delete retained data.
+
+   Status                                 Show active mode, model readiness, verified coverage, current delay, errors,
+                                          and a visible stop-capture control.
+
+   Accessibility                          Keyboard operation, labeled controls, readable focus states, reduced-motion
+                                          behavior, and persistent settings.
+
+
+ Automatic show-memory entries are suggestions, not facts. Names and special terms become
+ trusted glossary entries only after user approval or import from a user-trusted list. Do not promise
+ that unreviewed memory automatically improves translation.
+
+
+
+02 OCT 2026 | Performance targets require validation                                                                          2
+AI SUBS / PRODUCT & ENGINEERING                                                    PROPOSED RELEASE PLAN
+
+
+
+ Explicitly deferred
+ Keep conventional picture-in-picture, comprehensive HLS/DASH integrations, Linux-to-Mac network
+ inference, speaker naming, and additional translation languages outside the first release
+ guarantee. The architecture should permit them without making them dependencies for the core
+ experience.
+
+
+ 2. Architecture and component ownership
+
+ Proposed structure
+
+     Chrome extension
+       Popup / settings / subtitle review
+       Service worker: permission and session coordination
+       Content scripts: player discovery, timing, rendering
+       Offscreen document + AudioWorklet: live audio
+                  |
+        Native messaging: launch and pairing
+        Authenticated loopback: audio and job events
+                  |
+     Desktop companion: Tauri shell + small Rust launcher
+       Model manager, setup, library, diagnostics
+                  |
+     Local backend: Python job coordinator
+       FFmpeg ingestion -> VAD / segmentation -> ASR
+       Source-language alignment -> translation
+       Subtitle validation -> SQLite / SRT / WebVTT
+
+
+
+ Technical choices
+ Use TypeScript for the extension and shared message schemas. Use Manifest V3, a content script
+ for the player surface, and an offscreen document for live audio work. Chrome supports handing a
+ tab-capture stream ID from the service worker to an offscreen document; captured audio must
+ also be routed back to the audio output so the user continues hearing the episode. [S1, S8]
+
+ Use a Tauri desktop shell with a small Rust native-messaging launcher and a packaged Python
+ inference environment. Tauri documents bundling external binaries, which is the basis for
+ packaging the local worker rather than asking users to install it manually. [S10]
+
+ Use native messaging for application discovery, startup, and secure session bootstrap. Use an
+ authenticated loopback WebSocket for binary audio and progress events. Keep the socket and
+ audio graph in the offscreen document, not dependent on a long-lived service-worker timer.
+ Chrome native messaging provides explicit extension-origin allowlisting. [S7]
+
+ Use SQLite for jobs, cue revisions, settings, and glossary records; store larger temporary media
+ separately. Start with one heavy GPU job at a time and prioritize the active playback session.
+ Parallelize ASR and translation only after profiling memory and latency together.
+
+
+
+
+02 OCT 2026 | Performance targets require validation                                                  3
+AI SUBS / PRODUCT & ENGINEERING                                                                         PROPOSED RELEASE PLAN
+
+
+
+ Team responsibilities
+
+   Role                                   Accountability
+
+   Inference owner                        Model evaluation, segmentation, timing, translation, GPU scheduling,
+                                          benchmarks.
+
+   Extension owner                        Capture, permissions, player adapters, fullscreen, rendering, browser lifecycle.
+
+   Desktop/release owner                  Installer, model downloads, worker management, pairing, updates, local
+                                          storage.
+
+   QA and Japanese reviewer               Reference clips, meaning/timing review, regression suite, usability and release
+                                          approval.
+
+
+ These are workstreams, not required headcount; a solo developer can own multiple roles.
+ Automated coding support does not replace bilingual quality review or real-browser validation.
+
+
+ 3. Input access and media-time correctness
+
+ Source adapters
+ Implement a common interface that reports source type, selected audio track, duration, access
+ method, available ranges, and whether reading ahead is actually possible.
+
+ Local-file adapter: a companion file picker grants an opaque media handle. Inspect the media,
+ select the Japanese audio track when available, and decode only audio. A browser player must be
+ explicitly matched to the imported file before applying its captions.
+
+ Direct-source adapter: accept supported media URLs only through user-approved actions and
+ origin-scoped access. Preserve content timestamps and validate redirects. A URL visible in a
+ player is not automatically a fetchable full episode.
+
+ Live-tab adapter: capture only after a user gesture. Audio capture is tab-wide, so choosing a
+ video element does not isolate its audio from advertisements or other sounds in that tab. Warn
+ about competing sources and suspend or reset when a tested adapter detects an ad or media
+ replacement. [S1]
+
+ Existing-track adapter: reuse an accessible Japanese transcript or matching English subtitle
+ track before running speech recognition. Preserve original cue identity and timing.
+
+ For later HLS/DASH support, require individual adapter tests for manifests, audio renditions,
+ authorized access, timestamp discontinuities, expiration, and seek mapping. Do not simply
+ concatenate unrelated fragments. No DRM bypass, credential dumping, or universal extraction
+ claim is part of the design.
+
+ Timeline is a first-class data model
+ Store both media time and capture time. Every audio packet identifies the session, source,
+ epoch, sequence number, sample rate, sample position, and the applicable media-clock anchor.
+ Mark intervals containing a seek, stall, rate change, or discontinuity as invalid until a new anchor
+ is established.
+
+
+
+
+02 OCT 2026 | Performance targets require validation                                                                         4
+AI SUBS / PRODUCT & ENGINEERING                                                                  PROPOSED RELEASE PLAN
+
+
+
+ A new episode, seek, or audio-track change increments the epoch. Late model results from an old
+ epoch are discarded rather than displayed over the new scene. Save source-timed cues for replay;
+ live rendering also records when a cue actually became available.
+
+ Use media timestamps as the primary clock. A video-frame callback can supply the presented
+ frame’s media time; it is a rendering aid, not a guarantee of sample-accurate audio alignment.
+ Measure capture offset and drift separately. [S9]
+
+ Required behavior
+ If the user jumps to minute 12, cached subtitles display immediately there. In generate-ahead
+ mode, uncached minute-12 audio becomes the highest-priority work. In live mode, the system
+ resumes listening at minute 12 and never claims it can fill unheard minute-5 dialogue without
+ another accessible source.
+
+
+ 4. Model strategy and inference pipeline
+
+ Candidate configurations
+
+   Component                        Initial candidate                  Selection rule
+
+   Speech recognition               Qwen3-ASR-1.7B                     Primary quality baseline; compare the 0.6B
+                                                                       variant for a lighter preset.
+
+   Source timing                    Qwen3-ForcedAligner-0.6B           Align Japanese audio with Japanese text for
+                                                                       finalized cues.
+
+   Specialized translation          TranslateGemma 12B, with 4B as a   Use its documented translation interface;
+                                    smaller candidate                  evaluate fidelity and speed.
+
+   Context-aware                    Gemma 4 12B in text mode           Evaluate glossary adherence, natural
+   translation                                                         dialogue, and structured output.
+
+   Direct audio translation         Gemma 4 12B, experimental          Compare only after the controllable two-
+                                                                       stage pipeline works.
+
+   Speech segmentation              Silero VAD candidate plus          Validate on whispers, shouting, background
+                                    deterministic rules                music, and pauses.
+
+
+ Qwen’s published model materials include Japanese, offline/streaming recognition, and a separate
+ alignment model. Its documented streaming path uses vLLM and does not return timestamps or
+ support batch inference. Live capture timing and finalized alignment must therefore be designed
+ separately. [S2]
+
+ Google documents audio input for Gemma 4 12B, but the documented maximum audio length is
+ 30 seconds. Direct-audio processing still requires chunking and a separate subtitle-timing
+ strategy; it is not a one-call whole-episode shortcut. [S3]
+
+ TranslateGemma’s standard template is specialized: source language, target language, and text to
+ translate. Do not assume a general-purpose system prompt, arbitrary context blocks, and glossary
+ instructions work through that interface. Use Gemma 4’s separate adapter when instruction-
+ following is required, or validate a custom TranslateGemma approach as an experiment. [S4]
+
+
+
+
+02 OCT 2026 | Performance targets require validation                                                                 5
+AI SUBS / PRODUCT & ENGINEERING                                                       PROPOSED RELEASE PLAN
+
+
+
+ Offline pipeline
+ Decode to a consistent audio representation while preserving original offsets. Use speech-aware
+ chunks, initially about 15-25 seconds with bounded overlap, adjusted to avoid cutting words.
+ Recognize, deduplicate overlap, align the Japanese transcript, translate stable utterances, and
+ produce readable timed English cues. Retain full chronological offsets even when silence is
+ skipped for inference.
+
+ Translate complete utterances or short coherent groups, not isolated audio packets. Batch
+ independent work where the selected backend supports it. Do not load every candidate model at
+ once or assume a 12B label predicts total VRAM use.
+
+ Jev and Laya
+ Neither is required for recognition, translation, or scheduling. Their documented role is typed
+ decisions over supplied text/state rather than generating a subtitle transcript. Keep ordinary state
+ machines in the main path. A later local Laya experiment could classify whether a transcript
+ segment needs review, but must beat simple rules in measured quality and cost. [S11, S12]
+
+
+ 5. Subtitle quality, context, and editing
+
+ Two distinct caption lifecycles
+ Generate ahead: source audio arrives before viewing, so recognition, alignment, translation, and
+ validation can all complete before the corresponding scene is displayed. Finished cues use media
+ timestamps.
+
+ Live: audio must arrive first. The system collects a phrase, stabilizes recognition, translates it, and
+ displays the result late. Optional provisional text must be visually distinct and off by default. Keep
+ live arrival time separate from the original speech interval so the exported track can be
+ synchronized on replay.
+
+ Do not promise sub-second final translation from the beginning of every Japanese sentence.
+ Phrase completion is part of the latency budget. Pausing a tab also stops access to future playing
+ audio; a subtitle-delay slider does not create an advance buffer.
+
+ Context and terminology
+ Supply a bounded number of prior confirmed dialogue lines and the approved show glossary to the
+ context-aware translation adapter. Keep this transcript-derived context separate from user
+ instructions and never give the translation model tools, shell access, or network access. Treat
+ spoken instructions as dialogue to translate.
+
+ Do not infer a speaker’s identity or relationship merely because a familiar anime name appears.
+ Keep uncertain names reviewable. Changes to glossary entries create a new translation version
+ and can retranslate affected cues without rerunning recognition.
+
+ Subtitle assembly
+ First align source-language words or characters to source audio. Then carry utterance timing into
+ English and split or merge for readability. Do not try to force-align English translated words directly
+ against Japanese speech.
+
+
+
+
+02 OCT 2026 | Performance targets require validation                                                       6
+AI SUBS / PRODUCT & ENGINEERING                                                     PROPOSED RELEASE PLAN
+
+
+
+ Proposed English layout defaults are at most two lines, a soft maximum near 42 characters per
+ line, and a target of 12-20 characters per second. These are configurable product defaults, not
+ universal standards. Flag cues that cannot meet them without losing meaning rather than silently
+ deleting dialogue.
+
+ Use deterministic checks for valid timestamps, missing/duplicate cue IDs, empty output, wrong-
+ language output, excessive length, and unrequested commentary. Cap retries; preserve the
+ original result and mark a span for review when retries fail. Do not invent a calibrated confidence
+ percentage if the model or evaluation does not supply one.
+
+ Minimal subtitle record
+
+     cue_id, session_id, media_id, epoch
+     source_start_ms, source_end_ms
+     source_text, translated_text, target_language
+     status: provisional | final | user_edited | needs_review
+     model_revision, translation_config_hash, glossary_revision
+     available_at_capture_ms, revision_number
+
+
+
+ User edits override subsequent automated results unless the user explicitly requests replacement.
+ Silence, screams, and overlapping speech remain evaluation categories, not situations in which
+ the model is encouraged to guess.
+
+
+ 6. Browser rendering and fullscreen support
+
+ Rendering hierarchy
+ Native text track: first test adding a subtitle text track and timed cues to an accessible video
+ element. The browser exposes addTextTrack() for this purpose. Validate its appearance and
+ behavior on every player in the support matrix; do not assume the site leaves externally added
+ tracks enabled. [S6]
+
+ Custom overlay: use an isolated subtitle component attached within the player’s existing
+ container. Shadow DOM can reduce style collisions, but is not a security boundary. Measure video
+ bounds and safe areas, account for controls, and avoid intercepting ordinary player clicks.
+
+ Fullscreen fallback: when the existing player container is fullscreen, render inside that subtree.
+ When only the video element is fullscreen, prefer a validated native track. An explicit AI
+ Fullscreen button may request fullscreen on an existing safe ancestor containing both video and
+ captions. Avoid moving the video into a new wrapper by default; that can disturb the host player.
+
+ Fullscreen requires more than a high CSS z-index: the fullscreen element occupies the top layer,
+ and permission and user-activation requirements apply. Provide an in-page fallback when a
+ supported fullscreen route is unavailable. [S5]
+
+ Embedded and dynamic players
+ For cross-origin iframes, request the relevant optional site permission and inject into the actual
+ permitted player frame. all_frames applies to matching frames; it is not a bypass for inaccessible
+ frames or permissions. [S13]
+
+
+
+
+02 OCT 2026 | Performance targets require validation                                                   7
+AI SUBS / PRODUCT & ENGINEERING                                                     PROPOSED RELEASE PLAN
+
+
+
+ Test player replacement during single-page navigation, open Shadow DOM, multiple videos, ad
+ transitions, fullscreen toggling, resized windows, and an episode loading without a full page
+ reload. Closed or inaccessible player internals receive an explicit compatibility limitation.
+
+ Playback and lifecycle robustness
+ Remember original native-track state and restore it when subtitles are disabled. Hide duplicate
+ source captions only with user consent. Detach observers and audio nodes when capture stops or
+ the tab closes. Reconnect to the companion without creating a second audio monitor or duplicate
+ subtitle stream.
+
+ Ordinary picture-in-picture may exclude page overlays; ship it only for tested native-track
+ behavior. Document Picture-in-Picture can be a later dedicated feature. Do not label all picture-in-
+ picture modes supported after testing only in-page fullscreen.
+
+ Browser acceptance gate
+ Pass the same pause, seek, replay, rate-change, fullscreen, reload, and stop-capture tests on
+ ordinary HTML5, a permitted iframe player, and at least one dynamically replaced player. A
+ capability report must explain failures rather than falsely displaying Subtitles ready.
+
+
+ 7. Local security, privacy, and distribution
+
+ Trust boundaries
+ The web page is untrusted. Content scripts may report bounded player state, but cannot select
+ arbitrary local paths, issue shell commands, request model downloads, or forward arbitrary HTTP
+ requests to the companion.
+
+ The native host allowlists the published extension ID, with a separate development configuration.
+ Only a user-approved pairing step creates a session. Keep session credentials in extension-owned
+ contexts, never in page DOM or page messages. Validate message origin, active tab/frame,
+ session, epoch, and payload schema before forwarding.
+
+ Bind the local backend to loopback only. Require session authentication and strict Host/Origin
+ checks for HTTP and WebSocket connections; deny requests by default. Origin checks alone are
+ insufficient. Expire tokens, limit request and queue sizes, and reject unauthenticated access
+ before accepting audio. Native messaging and the browser-to-page separation are documented
+ platform boundaries, not a substitute for application validation. [S7]
+
+ For downloads, allow only explicit supported schemes and user-approved sources, validate redirect
+ destinations, and prevent arbitrary server-side requests. Select local files through the companion
+ and pass opaque handles. Run media parsers with bounded resources and argument arrays, not
+ shell-interpolated commands.
+
+ Data lifecycle
+ Default live audio storage is a bounded RAM buffer, not an archive. A full-job temporary cache is
+ visible, size-limited, and removed after completion or user cancellation according to policy. Delete
+ job-specific buffers on stop. Explain crash-recovery retention and sweep abandoned temporary
+ files at startup.
+
+
+
+
+02 OCT 2026 | Performance targets require validation                                                    8
+AI SUBS / PRODUCT & ENGINEERING                                                                         PROPOSED RELEASE PLAN
+
+
+
+ Keep subtitles and glossary data only as configured in the local library. Never store page cookies,
+ authorization headers, or expiring signed URLs in logs. Provide Delete episode data, Clear
+ library, and Remove downloaded models as distinct actions.
+
+ No telemetry by default. Diagnostic export is explicit, previewable, and redacted. Confirm that
+ processing still works with outbound traffic blocked once models and media are present. The
+ streaming website itself still requires network access.
+
+ Shipping requirements
+ Bundle the extension’s executable code; do not fetch scripts or WASM to execute from a CDN.
+ Chrome’s Manifest V3 remote-hosted-code rules make this a release concern. Download model
+ data through the companion with pinned revisions and integrity checks instead. [S14]
+
+ Provide a privacy policy, permission explanations, license notices for every bundled model/library,
+ and a reproducible release manifest. Review Chrome Web Store disclosure requirements even
+ when processing is local. [S15]
+
+ Desktop updates must be authenticated, recoverable, and separate from model revisions. Sign/
+ notarize packages where appropriate for the target platform, pin the tested runtime, and preserve
+ a rollback path. Do not claim the NVIDIA backend automatically works on the Mac.
+
+
+ 8. Performance plan and quality gates
+ All numbers below are proposed engineering targets, not benchmark findings. Freeze or revise
+ them after the first end-to-end measurements; do not advertise them before validation.
+
+   Metric                                 Proposed target and measurement
+
+   Complete 25-minute episode             Warm models and already-accessible local media: median at most 3 minutes;
+                                          95th percentile at most 5 minutes across the fixed evaluation suite. Include
+                                          recognition, alignment, translation, formatting, and export.
+
+   First ready range                      First 30-60 seconds of generate-ahead captions ready within 15 seconds on the
+                                          reference machine, subject to quality review.
+
+   Live caption delay                     Final translated cue: median at most 1.5 seconds, 95th percentile at most 3
+                                          seconds after the final source audio sample of the completed phrase. Report
+                                          phrase duration separately.
+
+   Renderer synchronization               For prepared cues, at least 95% of observed transitions within 100 ms of the
+                                          intended media-clock boundary on the support matrix. This is not an ASR
+                                          alignment score.
+
+   Recognition alignment                  On manually timed, non-overlapping speech: 95th-percentile absolute
+                                          boundary error at most 300 ms; report difficult audio separately.
+
+   Translation quality                    At least 95% of reviewed cues preserve meaning without a major meaning-
+                                          changing error on a fixed set of at least 500 human-reviewed cues; disclose the
+                                          rubric and sample.
+
+   Recovery                               A killed worker resumes from durable completed work without duplicating cues
+                                          or overwriting user edits.
+
+   Privacy                                No outbound inference traffic during an offline test; no credentials or raw
+                                          dialogue in default logs.
+
+
+
+
+02 OCT 2026 | Performance targets require validation                                                                        9
+AI SUBS / PRODUCT & ENGINEERING                                                                     PROPOSED RELEASE PLAN
+
+
+
+ Sub-60-second complete episodes remain a stretch experiment, never a reason to remove
+ alignment or quality checks silently.
+
+ Evaluation corpus
+ Maintain at least 20 authorized 20-25-minute episodes for episode-time measurement and 50
+ annotated short clips covering quiet dialogue, dense conversations, yelling, whispers, background
+ music, accents, names, songs, silence, and simultaneous speakers. Keep a separate held-out set
+ for final model selection. If fewer samples are available, report the actual count and do not imply a
+ stable tail-latency estimate.
+
+ Use a Japanese-capable human reviewer. Human-check negation, who did what to whom, names,
+ numbers, omissions, invented speech, and unnatural compression. Official translated subtitles are
+ useful references, not necessarily verbatim transcripts or exact alignment ground truth.
+
+ Benchmark reporting
+ Record hardware, driver/runtime versions, model revision, quantization, batch size, concurrency,
+ audio duration, speech density, peak memory, and stage durations. Separate first-install
+ download, cold model loading, network media access, and warm inference. Use at least three
+ warm runs per episode and report failed runs rather than dropping them.
+
+ Compare smaller and larger models on the same clips. Evaluate end-to-end wall time and quality,
+ not throughput from an unrelated highly concurrent benchmark. Resolve memory contention
+ before trying simultaneous ASR, alignment, and translation on one GPU.
+
+
+ 9. Delivery roadmap with exit gates
+ Use milestone-based planning. Assign calendar dates only after the source-access and benchmark
+ spikes reveal the actual work; the earlier prototype estimate is not a polished-release
+ commitment.
+
+   Milestone                        Deliverable                          Exit gate
+
+   M0 - Feasibility                 Source capability probe, model       One authorized episode and difficult clips
+                                    comparison harness, fullscreen/      produce a complete timed track; measured
+                                    timing experiment                    bottlenecks and supported input paths are
+                                                                         documented.
+
+   M1 - Offline engine              Local import, normalization,         Repeatable complete episodes; partial-job
+                                    segmentation, recognition,           resume; no duplicate/missing cues; visible
+                                    alignment, translation, export       review flags.
+
+   M2 - Browser player              Extension controls, companion        A generated track remains synchronized
+                                    pairing, native tracks/overlay,      through seek, pause, speed changes, and
+                                    media-clock mapping                  supported fullscreen.
+
+   M3 - Live mode                   Capture, audio monitoring, phrase    Full-episode sessions survive silence,
+                                    stabilization, backpressure, epoch   seeking, navigation, and reconnect without
+                                    resets                               stale or duplicated captions.
+
+   M4 - Product polish              Installer, model manager, library,   A fresh supported installation reaches a
+                                    glossary, editor, accessibility,     captioned test clip without a terminal; edits
+                                    diagnostics                          and privacy settings survive restart.
+
+
+
+
+02 OCT 2026 | Performance targets require validation                                                                     10
+AI SUBS / PRODUCT & ENGINEERING                                                                          PROPOSED RELEASE PLAN
+
+
+
+   Milestone                        Deliverable                              Exit gate
+
+   M5 - Release hardening           Browser matrix, fault injection,         Release gates pass on the pinned
+                                    privacy tests, signed packages,          configuration; known limitations and rollback
+                                    documented limits                        are documented.
+
+   M6 - Secondary platform          Mac backend and packaging                Repeat the same functional, quality, and
+                                                                             security gates; publish Mac-specific speed
+                                                                             results.
+
+
+ Dependency order
+ Source access and media timing are foundational. M1 is the inference base for both browser
+ modes. M2 validates display independently using saved subtitles. M3 follows a reliable display
+ path rather than trying to debug capture, ASR, timing, and rendering simultaneously. M4 and M5
+ turn the functional product into a dependable installation.
+
+ UI prototypes, the evaluation corpus, and installer skeleton can proceed alongside engine work.
+ Do not make advanced routing models, automatic speaker naming, or broad site extraction part of
+ the critical path.
+
+ Staffing and planning
+ Assign one accountable owner to each workstream and one release decision owner. Reserve
+ bilingual review and real-browser test sessions explicitly. A build is not ready because the happy-
+ path demo succeeded.
+
+ Estimate engineering effort from completed M0 tickets, then size the remaining backlog and
+ external release dependencies. Separate implementation work from store review, signing, model-
+ download availability, and hardware validation. These external dependencies are not guaranteed
+ turnaround times.
+
+
+ 10. Implementation backlog and repository shape
+ P0 means blocking the core architecture or correctness. P1 means required for a polished first
+ release. P2 means deferred extension of the product.
+
+   ID                Priority     Work item                                                    Depends on
+
+   CORE-01           P0          Versioned session, packet, cue, job, and capability schemas   -
+
+   EVAL-01           P0          Authorized fixtures, human-review rubric, reproducible        CORE-01
+                                 benchmark runner
+
+   SRC-01            P0          Local import and explicit audio-track selection               CORE-01
+
+   SRC-02            P0          Direct-source capability probe and honest fallback states     CORE-01
+
+   ML-01             P0          ASR, alignment, and translation adapter comparison            EVAL-01, SRC-01
+
+   TIME-01           P0          Absolute offsets, overlap removal, discontinuity and epoch    CORE-01
+                                 handling
+
+   SUB-01            P0          Cue assembly, schema validation, SRT/WebVTT output            ML-01, TIME-01
+
+   APP-01            P0          Companion launch, pairing, authenticated local transport      CORE-01
+
+   EXT-01            P0          Player discovery and native-track/custom rendering            SUB-01, APP-01
+
+
+
+02 OCT 2026 | Performance targets require validation                                                                         11
+AI SUBS / PRODUCT & ENGINEERING                                                                          PROPOSED RELEASE PLAN
+
+
+
+   ID                Priority     Work item                                                     Depends on
+
+   EXT-02            P0          Fullscreen and permitted iframe adapters                       EXT-01
+
+   LIVE-01           P0          Tab capture, audio monitoring, segmentation, bounded           APP-01, TIME-01
+                                 queues
+
+   LIVE-02           P0          Stable final cues, stale-result rejection, reconnect           LIVE-01, EXT-01
+
+   JOB-01            P1          Durable job stages, cancellation, resume, GPU prioritization   SUB-01
+
+   EDIT-01           P1          Cue editor, undo, review flags, approved glossary              SUB-01
+
+   LIB-01            P1          Media matching, coverage maps, cache versioning, deletion      JOB-01
+
+   SETUP-01          P1          Installer, verified models, runtime validation, test clip      APP-01, ML-01
+
+   SEC-01            P1          Authentication, parser limits, permission and privacy tests    APP-01, SRC-02
+
+   QA-01             P1          Browser matrix, crashes, long-session and update tests         All release items
+
+   MAC-01            P2          Separate Apple Silicon inference adapter and package           M5
+
+   STREAM-01         P2          Individually validated HLS/DASH source adapters                SRC-02, TIME-01
+
+   EXTRA-01          P2          Additional languages, tested PiP, optional local routing       M5
+
+
+ Suggested repository
+
+     ai-subs/
+       apps/extension/                  # MV3 UI, capture and player adapters
+       apps/desktop/                    # Tauri setup and local library
+       services/backend/               # Job coordinator and model workers
+       native-host/                    # Rust launcher and pairing bridge
+       packages/protocol/              # Shared schemas and version negotiation
+       tests/fixtures/                 # Authorized short test media
+       tests/browser/                  # Player and lifecycle regression tests
+       benchmarks/                     # Runner, configs and result summaries
+       docs/                           # Setup, security, support matrix, decisions
+
+
+
+ Do not commit model weights, user media, signed URLs, authentication material, or private
+ subtitle libraries. Pin model revisions and runtime lockfiles in reproducible manifests instead.
+
+
+ 11. Reliability, cache design, and release decision
+
+ Durable and bounded processing
+ Treat a job as a sequence of committed stages: ingest, segment, recognize, align, translate,
+ validate, export. Store stage status and content/config hashes so restarting a worker does not
+ redo completed work unnecessarily. Use atomic writes and idempotent event handling.
+
+ Audio transport must use bounded queues with acknowledgement and backpressure. If live
+ inference falls behind, reduce optional work or explicitly report delay. Never grow memory
+ indefinitely or silently skip dialogue. Stop further ingestion when a job is cancelled; cancel queued
+ GPU work where supported and discard late results otherwise.
+
+
+
+
+02 OCT 2026 | Performance targets require validation                                                                       12
+AI SUBS / PRODUCT & ENGINEERING                                                                           PROPOSED RELEASE PLAN
+
+
+
+ When memory is insufficient, retry a smaller batch or select an already-tested lighter preset with
+ user-visible status. Do not silently replace the translation model halfway through an episode
+ without tracking that change.
+
+ Cache identity
+ Match subtitles to media using source identity, duration, selected audio track, and a content
+ fingerprint where available. Title plus episode number is insufficient: openings, recap cuts,
+ advertisements, dubs, and alternate editions can change timing.
+
+ Keep raw recognition, alignment, translation, user edits, and glossary versions separate. A font
+ change must not rerun inference. A target-language or glossary change should invalidate only the
+ relevant translation layer. An edited cue stays protected. A source fingerprint mismatch requires
+ confirmation or a new job.
+
+ Release risks and decisions
+
+   Risk                                   Planned response
+
+   Full audio inaccessible                Explain the limitation and offer live capture or local import; no fake
+                                          preprocessing progress.
+
+   Anime translation errors               Held-out review set, visible uncertainty/review states, corrections, bounded
+                                          retries.
+
+   Fullscreen/player conflicts            Native track first; tested container overlay; explicit unsupported state.
+
+   Timeline drift or late results         Media anchors, offset tests, discontinuity epochs, strict stale-result rejection.
+
+   GPU/runtime problems                   Pinned tested backend, measured memory budgets, sequential scheduling and
+                                          known fallback presets.
+
+   Wrong cached episode                   Fingerprint/version checks, duration and audio-track verification, user
+                                          confirmation.
+
+   Privacy or unsafe local                Pairing, loopback authentication, origin validation, narrow message capabilities,
+   endpoint                               redacted diagnostics.
+
+   Installation/update failure            Clean-machine tests, integrity verification, authenticated updates and rollback.
+
+
+ Definition of done
+ A fresh installation on the supported reference system generates and displays a complete
+ evaluated episode, survives the full playback/lifecycle matrix, reports limits honestly, preserves
+ user edits, exports a reusable track, deletes retained data correctly, and performs no undisclosed
+ outbound inference.
+
+ Recommended build order: prove local episode-to-SRT quality; prove browser timing and
+ fullscreen using that SRT; add live capture; then finish installation, editing, recovery, security, and
+ release validation.
+
+
+
+
+02 OCT 2026 | Performance targets require validation                                                                          13
+AI SUBS / PRODUCT & ENGINEERING                                                          PROPOSED RELEASE PLAN
+
+
+
+
+ 12. Sources and verification notes
+ Primary documentation checked October 2, 2026. These sources establish platform/model capabilities, not
+ the proposed application’s benchmark results. Runtime support, licensing, packaging, and store
+ requirements must be rechecked when the release configuration is frozen.
+
+ S1. Chrome - tabCapture API. User-invoked capture, the tab audio stream, audio-monitor restoration, and
+ offscreen stream-ID use.
+ https://developer.chrome.com/docs/extensions/reference/api/tabCapture
+
+ S2. Qwen team - Qwen3-ASR repository. Model variants, Japanese support, alignment model, backend
+ options, and streaming limitations.
+ https://github.com/QwenLM/Qwen3-ASR
+
+ S3. Google - Gemma 4 model card. Model sizes/modalities and the documented 30-second audio input
+ limit.
+ https://ai.google.dev/gemma/docs/core/model_card_4
+
+ S4. Google - TranslateGemma 12B model card. Specialized input template and distinction between the
+ documented interface and alternate prompting experiments.
+ https://huggingface.co/google/translategemma-12b-it
+
+ S5. MDN - Guide to the Fullscreen API. Fullscreen behavior, element hierarchy, and activation/
+ permission considerations.
+ https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API/Guide
+
+ S6. MDN - HTMLMediaElement.addTextTrack(). Programmatic text tracks.
+ https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/addTextTrack
+
+ S7. Chrome - Native messaging. Native host registration, origin allowlisting, protocol, and validation
+ guidance.
+ https://developer.chrome.com/docs/extensions/develop/concepts/native-messaging
+
+ S8. Chrome - offscreen API. Offscreen document capabilities and lifecycle considerations.
+ https://developer.chrome.com/docs/extensions/reference/api/offscreen
+
+ S9. MDN - requestVideoFrameCallback(). Presented-frame metadata and media time.
+ https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement/requestVideoFrameCallback
+
+ S10. Tauri - Embedding external binaries. Packaging platform-specific sidecar executables.
+ https://v2.tauri.app/develop/sidecar/
+
+ S11. Laya project repository. Typed text/state decisions; not a speech transcription pipeline.
+ https://github.com/NandhaKishorM/laya
+
+ S12. Jev public GitHub overview. Documented state inputs and decision interface.
+ https://github.com/jev-ai
+
+ S13. Chrome - Content scripts. Isolated contexts, frame matching, and injection behavior.
+ https://developer.chrome.com/docs/extensions/develop/concepts/content-scripts
+
+ S14. Chrome - Remote-hosted-code violations. Manifest V3 packaging restrictions for executable
+ extension code.
+ https://developer.chrome.com/docs/extensions/develop/migrate/remote-hosted-code
+
+ S15. Chrome Web Store - Privacy and secure-handling FAQ. Privacy policy and disclosure
+ requirements.
+ https://developer.chrome.com/docs/webstore/program-policies/user-data-faq
+
+
+
+
+02 OCT 2026 | Performance targets require validation                                                       14
+

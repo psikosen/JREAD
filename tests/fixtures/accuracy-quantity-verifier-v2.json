@@ -1,0 +1,255 @@
+{
+  "schema_version": 1,
+  "status": "frozen",
+  "purpose": "Fresh paired synthetic comparison of XCOMET-lite alone versus identical scores plus a conservative typed quantity guard. No end-to-end caption accuracy claim.",
+  "case_count": 32,
+  "strata": {
+    "date_time": 8,
+    "money_measurement": 8,
+    "equivalent_or_unsupported": 8,
+    "other_meaning": 8
+  },
+  "candidate_design": "Each source has two independently reviewed faithful English variants and two fluent but meaning-incorrect variants. Fresh fixture drafted without reading guard implementation or old evaluation examples; no guard tuning after fixture exposure.",
+  "primary_metric": "128 good/bad preferences, four per source. Higher XCOMET score wins, ties fail. Same raw XCOMET scores reused for paired combined condition.",
+  "combination_rule": "Override only if exactly one candidate is quantity-consistent and the other quantity-mismatched; prefer consistent. Any abstain, both consistent or both mismatch retains raw XCOMET ranking. No score thresholds.",
+  "guard_scope": "Exact typed quantity multisets for a bounded explicit grammar, requiring matching dimension sets AND per-dimension occurrence counts. Compound amounts, grouping/deduplication ambiguity, unknown numeric residue, missing dimensions, approximations, ranges and unsupported paraphrases abstain. Same-value role swaps are invisible. Consistent means quantity-only, not faithful overall.",
+  "technical_plan": "Bind and reuse already successful XCOMET v3 six-group technical smoke because same model/helper/runtime unchanged. Tokenize all129 requests without model loading, then one owned CPU four-thread FP32 worker scores128 new candidates plus one explicit prior smoke warmup. No successful generation rerun.",
+  "warmup_rule": "First request of the bound prior smoke requests is prepended once; excluded from all reported fresh denominators and scoring totals.",
+  "further_study_rule": "Combined >=90% overall and >=75% each stratum, positive paired improvement, ZERO regression on baseline-correct pairs, and ZERO quantity-mismatch verdicts on faithful candidates. Complete technical execution and independent audit required. Qualifies only for considering separate natural-caption validation; no production eligibility.",
+  "freeze_order": "Guard implementation and standalone unit checks frozen before root opens fresh cases for bilingual acceptance. Final fixture, runner, dependencies and selection rule frozen before any fresh guard execution or model score. No parser edits based on fresh cases/results.",
+  "model": {
+    "python": "/media/psikosen/newvolume/jread-verifier/xcomet/env/bin/python",
+    "helper": "/media/psikosen/newvolume/jread-verifier/xcomet/bin/xcomet_score_v3.py",
+    "bindings": [
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/bin/xcomet_score.py",
+        "sha256": "5cc959d66808776fe4cc92262117a2150c49f48afa14aa3d64883fbf188f92c1"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/provenance.json",
+        "sha256": "a91d68db2aece68c86f47c25fad05b517a4b5779473f69cf5aa76a4f11d4479d"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/installed.freeze.txt",
+        "sha256": "411132878cfc5a86aea3fe5c20ac8476b03d3abfdd28c2f1d3858e00cabb8412"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/source/repo/xcomet/deberta_encoder.py",
+        "sha256": "f00ad8e45857fbaaa283bd19ecdb10b37878ef0dcc2e621f61a7793a04a30b4d"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/__init__.py",
+        "sha256": "0752f8e5cabb14c18826f3a1f40a2c92c9947aea43b0e3e910d65bd1cc867e1f"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/cli/compare.py",
+        "sha256": "863fb3c1385ded45105cb86deacc38f7ae01100bf69054f2e5b2f066e61bb693"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/cli/mbr.py",
+        "sha256": "d34321c3af71008da415bde212d718e4657366a817d9dec12284a18f7ba28579"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/cli/score.py",
+        "sha256": "ea2059c4d45c60fd9f62f085296b7ba9fd6ccd69b32035a9c0bcab15021bd88e"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/cli/train.py",
+        "sha256": "ac2726b149cf029f0ad82ed29d3b1e779d3abc775619e69257bbb6239901d029"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/encoders/__init__.py",
+        "sha256": "83b20807692e7f69fb8ecf885ea3198a0eafe62744b5e2398c6092a37ea64648"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/encoders/base.py",
+        "sha256": "9b26b529f8b5d2fd6b48eb34cad765c53538d8b4dcf6578576edf77fe6ac1999"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/encoders/bert.py",
+        "sha256": "ccb14e889dff082bd2de727b81c3309362155f160d5e07441fa1bf4cd4507358"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/encoders/minilm.py",
+        "sha256": "4efb75899275a5f03cb8d26fe74c1dae1e7222faf7bbb1172730b39d95f0c639"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/encoders/rembert.py",
+        "sha256": "0bb3d37b2fc7e4bdb1a5375f2d4dc75f930b0b55a74690cae4e0188b1858c8cb"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/encoders/xlmr.py",
+        "sha256": "1ee88c190d8b4b2237e728750b0e93c72820d7eb7377c9cc5a813d0ddc33256e"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/encoders/xlmr_xl.py",
+        "sha256": "599cce47996416462b43bd7c94b1795d1ab7ea36c5623ba11a99476a30efac9b"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/models/__init__.py",
+        "sha256": "dfe8cfdf199a6926ef664aa98a0404930f3864d76dd43182fab5ff8ff5c28390"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/models/base.py",
+        "sha256": "9caf4c1fd93073b8080aed3752bf6813da0e125f42574cef6a36e4f5876c965b"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/models/download_utils.py",
+        "sha256": "7592118dddb133a29dfc6f1184580949de81a4b918eb6c431e663cd5df20f09f"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/models/lru_cache.py",
+        "sha256": "0dcd88cc757797db87cd51d923c61f869b0f2817e7f5d1d7a5cbfbf900a51f67"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/models/metrics.py",
+        "sha256": "1b914510785675ac320e3327255f69e3a3a45e3360f38ff7c239920d41924135"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/models/multitask/__init__.py",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/models/multitask/unified_metric.py",
+        "sha256": "74bee0269167e2fc061917515c6e9216d0a7c1a05039eb2e4adc7ca71d04fc7a"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/models/multitask/xcomet_metric.py",
+        "sha256": "1d58f015f3c6178c09fbde7f401f1764d9317df3fb46225787f354576622c222"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/models/pooling_utils.py",
+        "sha256": "1425c2bbdb88b594fa2e1c78a1dba4c25f0fa0f8946d36c6404cfa6e4351b7cc"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/models/predict_pbar.py",
+        "sha256": "57541acf7dbcf57adf4a24f52d67be0c15a4358211ad5cd833611188ff7501df"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/models/predict_writer.py",
+        "sha256": "2516ad78983fd3d4ab61a37581b09b34d5e59a528bf1b305c5bb483ce6a9f4c4"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/models/ranking/__init__.py",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/models/ranking/ranking_metric.py",
+        "sha256": "6a8de6c693bc9170db441b16ebeaa81d17f81ea75662f4dc687eb092aa3b3d8c"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/models/regression/__init__.py",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/models/regression/referenceless.py",
+        "sha256": "bd21661a9b451176fe92bb7322d2f224d5cb8756906325bc19cdb33429907587"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/models/regression/regression_metric.py",
+        "sha256": "e3f63313791127f61cfaaacb2aec676ca9bdb09ef098cf80e504818d15deaf19"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/models/utils.py",
+        "sha256": "0b2458d75c67db20182501e76940fc91b90b8ebb12b555a9a65d5d8951ebf095"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/modules/__init__.py",
+        "sha256": "92f632a59be499f24b09ed19ba318f06fbd5ad56065aeff75adff876268184c8"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/modules/feedforward.py",
+        "sha256": "dacec9548808bdc0647fdecdbb4699d9ceb1e0026451e1497f72397063717fa6"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/env/lib/python3.11/site-packages/comet/modules/layerwise_attention.py",
+        "sha256": "b381aa96852e91abe8584e93624191ba25071d2bd03d24e258e8e5688beaa5ea"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/bin/xcomet_score_v2.py",
+        "sha256": "af2e63e8a1b39c68090d2444675818bb031994102f46406b9ddafa1176c34c15"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/xcomet/bin/xcomet_score_v3.py",
+        "sha256": "7d888749c56782c43457bd5df76a75c71e476e5936503237d767bce5c04928ea"
+      }
+    ],
+    "model_revision": "8d628ebffb4e3f20f53f52f9570d19dee38b9b9a",
+    "source_commit": "e21e291b2a09a5a854c55b0c01c53ab580692beb",
+    "torch_version": "2.7.1+cpu",
+    "execution": "CPU float32, four threads, deterministic, strict local checkpoint load, batch size one so warmup is separate.",
+    "score_definition": "Reference-free XCOMET 2.2.7: 0.78 clipped regression + 0.22 span-derived MQM; higher wins; not a correctness probability."
+  },
+  "bindings": [
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_caption_verifiers.py",
+      "sha256": "7ff80f33787febd772633307917f43ecf46372f8474c6c7bb84f35aabc0caa8f"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_reazon.py",
+      "sha256": "0e516982356d200c14738ced3390b2b94e65c81bf9fc94594a4f3e1d9357a39a"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-verifier/quantity-v2-guard-freeze.json",
+      "sha256": "904553eacdb39da695cf860223f1f821f62f6da8bbf81741aae209a33653367f"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/quantity_guard.py",
+      "sha256": "4d977b7085848c2ccd5acb22c2a2535821a61d02113f8fb570bd650a1a25d543"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/test_quantity_guard.py",
+      "sha256": "78a17b422fef752280c150de1806208e4361ae5e21e57ad56728e9b8974aeb1f"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-verifier/quantity-v2-guard-review.json",
+      "sha256": "867f38331878e580207ff24675f308a48bb42f66ecea8b077fed76c682257e6f"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-verifier/quantity-v2-runner-review.json",
+      "sha256": "894f77308e56d6ec1f20cdfd5fd237f36a50178a7effc90051fee289c9370bcf"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-verifier/quantity-v2-root-technical-review.json",
+      "sha256": "c1f7804e9f624ea6431a5b811439b0ba53840ecb9a7222ad3956021d0ca26164"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-verifier/data/quantity-v2-draft.json",
+      "sha256": "e4a95d006045acc4701d36fb8a0c19c87447592cb0d55adae0f91e871556986f"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-verifier/data/quantity-v2-draft-review.json",
+      "sha256": "e3ba52559711d165ac2e6dd3385f06164215dcf095d094a96ab23a250c0f9608"
+    }
+  ],
+  "fixture": {
+    "path": "/media/psikosen/newvolume/jread-verifier/data/quantity-v2.json",
+    "sha256": "ec220e9573ece719da11ef696a11cf7fada0fa47076bc66231363a0c6363b2e9"
+  },
+  "fixture_review": {
+    "path": "/media/psikosen/newvolume/jread-verifier/data/quantity-v2-root-review.json",
+    "sha256": "d80b001d0f716224fa23ae614f97d5fa91743be8cf4560ea7a9c2bd3f1112308"
+  },
+  "reused_technical_smoke": {
+    "path": "/media/psikosen/newvolume/jread-verifier/xcomet-api-fix-v3/runs/xcomet-smoke-v1/report.json",
+    "sha256": "02c82d139afa1ce17e9339afdc98c9b86f58e3f0923019807575cda4cccaf5b2"
+  },
+  "reused_technical_protocol": {
+    "path": "/home/psikosen/JREAD/tests/fixtures/accuracy-caption-verifiers-xcomet-api-v3.json",
+    "sha256": "3adca8fca01b029aaea113e172b3ec254413387ba7d509651aa78ac71caa0571"
+  },
+  "warmup_requests": {
+    "path": "/media/psikosen/newvolume/jread-verifier/xcomet-api-fix-v3/runs/xcomet-smoke-v1/requests.json",
+    "sha256": "158d124b5557c9c1b561abd762aba06923dcb71f57cc824807aabefbf8931d16"
+  },
+  "runner_sha256": "2eabe7192abb99fb85086130a02faa077c5310634ea0041ebb0ded6790fe2212",
+  "limitations": [
+    "Model-assisted synthetic authored/reviewed data, not human certification, not natural speech/anime.",
+    "128 within-group comparisons are correlated;32 unique sourcegroups.",
+    "Fresh baseline counts cannot be compared directly with previous95/112 or historical14/20.",
+    "No heldout50 access, no cloud inference, no finetuning, no production changes.",
+    "Unknown expressions abstain; absence of a mismatch verdict proves nothing about complete translation meaning.",
+    "The combined rule is a pairwise diagnostic only; it is not a validated total ordering for three or more candidates."
+  ],
+  "frozen_at_utc": "2026-10-05T02:12:05.926863+00:00"
+}

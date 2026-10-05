@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "status": "frozen",
+  "frozen_at_utc": "2026-10-05T05:20:27.172370+00:00",
+  "runner_sha256": "2367004297c161f9e23979b522a20c2070db72b46606137d72966ae332af38d3",
+  "settings": {
+    "preset": "gemma4",
+    "device": "CPU",
+    "threads": 8,
+    "context_tokens": 4096,
+    "port": 18767,
+    "temperature": 0,
+    "seed": null,
+    "max_tokens": 1024,
+    "ledger_max_tokens": 1536,
+    "thinking": false
+  },
+  "controls": {
+    "path": "/media/psikosen/newvolume/jread-semantic-ledger/data/controls-sources.json",
+    "sha256": "f6a0c494dc43898f9c72f339acd5eec108561975f0afaac6d0099b9bd343174a"
+  },
+  "control_ids": [
+    "C01",
+    "C02",
+    "C03",
+    "C04",
+    "C05",
+    "C06",
+    "C07",
+    "C08",
+    "C09",
+    "C10",
+    "C11",
+    "C12"
+  ],
+  "output_dir": "/media/psikosen/newvolume/jread-semantic-ledger/controls",
+  "bindings": [
+    {
+      "path": "/home/psikosen/.local/share/JREAD/models/gemma4-e4b/gemma-4-E4B_q4_0-it.gguf",
+      "sha256": "676c35070db6dbe52f93e9c864ee0fba4eddea94b9c875d9cb10daff453fbaee"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/llama-server",
+      "sha256": "22de090746c114569367998ec930b28f27f12e078e593ff21175a54b409d26fe"
+    },
+    {
+      "path": "/home/psikosen/JREAD/docs/runtime.json",
+      "sha256": "90125fd934819e802f431916a9d142bd2a8dfb3f902fc80835cd811da1cbc1c5"
+    },
+    {
+      "path": "/home/psikosen/JREAD/jread/gemma.py",
+      "sha256": "82c500f169e26b7e8d53df874fcb3b091d095a6bc9e5c3957f67d4ce05491b49"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_asr_recovery_translation.py",
+      "sha256": "d106777cb5bd5a7e2168fa6639b957807f660e196471f9a47c636cf874d7e755"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_semantic_ledger.py",
+      "sha256": "2367004297c161f9e23979b522a20c2070db72b46606137d72966ae332af38d3"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_streaming_combinations.py",
+      "sha256": "23de767fb83a05ea36712fe76ea370eabf08dbfd8dce8c68404bc84ccbd5a94c"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_streaming_translation.py",
+      "sha256": "75c275d79898aa0eb28aca0c964cfb3f8e278f1d02ae982a44b949c22fce355c"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_translation.py",
+      "sha256": "5d10fd2cee5e89191b6d0e4eeb3c7876f3b4674fd005d09e155892991e629582"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_translation_ensemble.py",
+      "sha256": "92b431bab0ea6d5bcabfa51c301135c3ce27e560d0ecdca8affbdb73ef8aff05"
+    }
+  ],
+  "model": {
+    "preset": "gemma4",
+    "provenance": {
+      "label": "Gemma 4 E4B",
+      "directory": "gemma4-e4b",
+      "alias": "jread-gemma4-e4b",
+      "repo": "google/gemma-4-E4B-it-qat-q4_0-gguf",
+      "revision": "4b4a2c1d584be7264f87aac328a1bc739ce81b6c",
+      "filename": "gemma-4-E4B_q4_0-it.gguf",
+      "sha256": "676c35070db6dbe52f93e9c864ee0fba4eddea94b9c875d9cb10daff453fbaee",
+      "size": 5154941280
+    },
+    "runtime": {
+      "name": "llama.cpp",
+      "purpose": "isolated CPU-only runtime for Gemma 4 translation quality evaluation",
+      "source": "https://github.com/ggml-org/llama.cpp",
+      "release": "v0.5.0",
+      "build_tag": "b11146",
+      "commit": "7fe450e19305b828c199d602c23a8337aaa1f03b",
+      "asset": "llama-b11146-bin-ubuntu-x64.tar.gz",
+      "asset_url": "https://github.com/ggml-org/llama.cpp/releases/download/b11146/llama-b11146-bin-ubuntu-x64.tar.gz",
+      "asset_sha256": "c150306eb16b5ab696f76a8bdf810c35fd98a24e82158742e6fa28f420ff8410",
+      "asset_sha256_source": "GitHub release asset digest; verified against downloaded archive",
+      "api": "OpenAI-compatible /v1/chat/completions",
+      "thinking_control": {
+        "server_default": "--reasoning-budget 0",
+        "request_json": "chat_template_kwargs: {\"enable_thinking\": false}",
+        "note": "The current compact JSON prompt passed both 17-request E4B/12B comparisons; generation used thinking off and temperature 0. Model-specific quality and timing findings are recorded in development-status.md."
+      },
+      "model": {
+        "repo": "google/gemma-4-E4B-it-qat-q4_0-gguf",
+        "revision": "4b4a2c1d584be7264f87aac328a1bc739ce81b6c",
+        "filename": "gemma-4-E4B_q4_0-it.gguf",
+        "sha256": "676c35070db6dbe52f93e9c864ee0fba4eddea94b9c875d9cb10daff453fbaee",
+        "size_bytes": 5154941280
+      },
+      "platform": "Linux x86_64",
+      "runtime_version": "0.5.0-dev (build 11146, commit 7fe450e19); GNU 11.4.0",
+      "cpu_only": true,
+      "server_settings": {
+        "host": "127.0.0.1",
+        "port": 18766,
+        "context_tokens": 4096,
+        "threads": 8,
+        "gpu_layers": 0,
+        "jinja": true,
+        "reasoning_budget": 0,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "web_ui": false
+      }
+    },
+    "runtime_binary_sha256": "22de090746c114569367998ec930b28f27f12e078e593ff21175a54b409d26fe",
+    "prompt_builder_source_sha256": "d45a5beac81d67106abeb9f28d66c9179c93176c8e2e527e66aab64908de6a5b"
+  },
+  "scope": "Fresh12 synthetic controls only; no development generation or production change. Fixed source-span ledger followed by translation, matched original-prompt comparator.",
+  "selection_rule": "Fixed pipeline for all12. Invalid ledger retained as failure, rendering skipped, no automatic fallback, retries, or per-case prompt changes. Semantic grading performed independently after model cleanup."
+}

@@ -1,0 +1,94 @@
+import assert from "node:assert/strict";
+import {Chunker, Clock, PCMResampler, Packet, PendingPackets, cleanStyle, cueText, durationMismatch, lateCueTimes, mediaNow, validClock, validCue, validSourceLanguage} from "../src/core";
+
+assert(validSourceLanguage('es'));
+assert(validSourceLanguage('ja'));
+for (const invalid of ['auto', 'constructor', '__proto__', null, 1, {}]) assert(!validSourceLanguage(invalid));
+
+const cue = {id: 1, start: 1, end: 2, text: "<b>A & B</b>", source_text: "日本語"};
+assert(validCue(cue));
+assert(!validCue({...cue, start: -1}));
+assert(!validCue({...cue, end: NaN}));
+assert(!validCue({...cue, end: 1}));
+assert.equal(cueText(cue, true), "&lt;b&gt;A &amp; B&lt;/b&gt;\n日本語");
+assert.equal(cleanStyle({font_size: 999, position: -200}).font_size, 60);
+assert.equal(cleanStyle({font_size: 999, position: -200}).position, 10);
+assert(durationMismatch(1400, 1200));
+assert(!durationMismatch(null, 1200));
+assert(!durationMismatch(1400, 1398));
+const clock: Clock = {videoId: "v", mediaId: "m", time: 10, paused: false, wall_time: 1000, reason: "tick", rate: 2, serial: 1};
+assert(validClock(clock));
+assert(!validClock({...clock, rate: 0}));
+assert(!validClock({...clock, time: Infinity}));
+assert.equal(mediaNow(clock, 2500), 13);
+assert.equal(mediaNow({...clock, paused: true}, 2500), 10);
+assert.equal(mediaNow(clock, 0), 10);
+assert.deepEqual(lateCueTimes(cue, 10, 0, 1, 0), {start: 10, end: 12});
+assert.deepEqual(lateCueTimes(cue, 10, 12, 1, 1), {start: 12, end: 14});
+assert.throws(() => lateCueTimes(cue, 10, 39, 1, 10), /cannot keep up/);
+assert.throws(() => lateCueTimes(cue, 10, 0, 1, 12), /cannot keep up/);
+
+for (const sampleRate of [16000, 44100, 48000]) {
+  const converter = new PCMResampler(sampleRate);
+  const result: number[] = [];
+  const left = new Float32Array(sampleRate).fill(0.5);
+  const right = new Float32Array(sampleRate).fill(-0.25);
+  const collect = (block: Int16Array) => result.push(...block);
+  for (let i = 0; i < sampleRate; i += 128) converter.push([left.subarray(i, i + 128), right.subarray(i, i + 128)], collect);
+  converter.flush(collect);
+  assert.equal(result.length, 16000, `${sampleRate} Hz -> 16 kHz sample count`);
+  assert(result.every((sample) => sample === 4096), `${sampleRate} Hz stereo average`);
+}
+const tail: number[] = [];
+const converter = new PCMResampler(16000);
+converter.push([new Float32Array([1, -1, 2, -2])], (block) => tail.push(...block));
+converter.flush((block) => tail.push(...block));
+assert.deepEqual(tail, [32767, -32768, 32767, -32768]);
+
+const chunker = new Chunker();
+const packets: Packet[] = [];
+const pcm = Int16Array.from({length: 15 * 16000}, (_, index) => index % 30000);
+for (let i = 0; i < pcm.length; i += 2048) chunker.push(pcm.subarray(i, i + 2048), 12 + i / 16000 * 2, 2, (packet) => packets.push(packet));
+assert.equal(packets.length, 2);
+assert.deepEqual(packets.map((packet) => packet.media_time), [12, 26]);
+assert.equal(packets[0].pcm.length, 128000);
+assert.equal(packets[1].pcm.length, 128000);
+assert.deepEqual(packets[0].pcm.subarray(112000), packets[1].pcm.subarray(0, 16000));
+chunker.flush((packet) => packets.push(packet));
+assert.equal(packets.length, 2, "exactly 15 seconds must not flush already-sent overlap");
+chunker.reset();
+chunker.push(new Int16Array(800).fill(7), 90, 1, (packet) => packets.push(packet));
+chunker.flush((packet) => packets.push(packet));
+assert.equal(packets.at(-1)?.media_time, 90);
+assert.equal(packets.at(-1)?.pcm.length, 800, "pause/stop preserves sub-quarter-second speech tails");
+
+const finalChunker = new Chunker();
+const finalPackets: Packet[] = [];
+const finalPCM = Int16Array.from({length: 8 * 16000 + 800}, (_, index) => index % 30000);
+const collectFinal = (packet: Packet) => finalPackets.push(packet);
+finalChunker.push(finalPCM.subarray(0, 128000), 12, 2, collectFinal);
+finalChunker.flush(collectFinal);
+assert.equal(finalPackets.length, 1, "exactly 8 seconds must not flush already-sent overlap");
+finalChunker.push(finalPCM, 12, 2, collectFinal);
+finalChunker.flush(collectFinal);
+assert.equal(finalPackets.length, 3);
+assert.equal(finalPackets[2].media_time, 26, "fresh tail retains the overlap's media clock");
+assert.equal(finalPackets[2].rate, 2);
+assert.deepEqual(finalPackets[2].pcm, finalPCM.subarray(7 * 16000), "8 seconds plus short speech flushes overlap and every fresh sample");
+finalChunker.push(new Int16Array(800), 60, 1, collectFinal);
+finalChunker.reset();
+finalChunker.flush(collectFinal);
+assert.equal(finalPackets.length, 3, "reset clears fresh samples as well as overlap");
+finalChunker.push(new Int16Array([7]), 90, 1, collectFinal);
+finalChunker.flush(collectFinal);
+assert.equal(finalPackets.at(-1)?.media_time, 90);
+assert.deepEqual(finalPackets.at(-1)?.pcm, new Int16Array([7]), "even one fresh sample survives a final flush");
+
+const pending = new PendingPackets();
+const first = pending.send(); pending.send(); pending.send();
+assert.throws(() => pending.send(), /fell behind/);
+pending.ack(first); assert.equal(pending.send(), 3);
+assert.equal(pending.reset(), 1);
+assert(!pending.accepts(0)); assert(pending.accepts(1));
+pending.ack(2); assert.equal(pending.send(), 4, "sequence numbers must remain unique across epochs");
+console.log("Extension core checks passed: cue safety, timing, resampling, overlap, final tails, backpressure and epochs.");

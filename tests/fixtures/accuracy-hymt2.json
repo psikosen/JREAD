@@ -1,0 +1,453 @@
+{
+  "schema_version": 1,
+  "status": "frozen",
+  "frozen_at_utc": "2026-10-05T16:27:25.288872+00:00",
+  "runner_sha256": "c16ff26da3e5844264b66d01fb196694da0f839027cf4267d326f2e8a0f2d7c1",
+  "sources": {
+    "path": "/media/psikosen/newvolume/jread-hymt2/data/sources.json",
+    "sha256": "2577ad284194401f92d9f319d1cb765eafce28a18221e45a0f164655cf04b30a"
+  },
+  "glossary": {
+    "path": "/media/psikosen/newvolume/jread-hymt2/data/glossary.json",
+    "sha256": "d62b61c97650b79e2ec892a8f1e519f0102e722962c0da342fe0b88aa4c9c378"
+  },
+  "plan": {
+    "path": "/media/psikosen/newvolume/jread-hymt2/data/request-plan.json",
+    "sha256": "cface8b03423217ae3cdafc62680035e0ee9774436e8d9a3c718305cee02eb7d"
+  },
+  "review_protocol": {
+    "path": "/media/psikosen/newvolume/jread-hymt2/review/protocol.json",
+    "sha256": "2696341b839e35308bb0de912beefb3445074d150e22448b3458d49e280b86a1"
+  },
+  "models": {
+    "gemma": {
+      "preset": "gemma4",
+      "provenance": {
+        "label": "Gemma 4 E4B",
+        "directory": "gemma4-e4b",
+        "alias": "jread-gemma4-e4b",
+        "repo": "google/gemma-4-E4B-it-qat-q4_0-gguf",
+        "revision": "4b4a2c1d584be7264f87aac328a1bc739ce81b6c",
+        "filename": "gemma-4-E4B_q4_0-it.gguf",
+        "sha256": "676c35070db6dbe52f93e9c864ee0fba4eddea94b9c875d9cb10daff453fbaee",
+        "size": 5154941280
+      },
+      "runtime": {
+        "name": "llama.cpp",
+        "purpose": "isolated CPU-only runtime for Gemma 4 translation quality evaluation",
+        "source": "https://github.com/ggml-org/llama.cpp",
+        "release": "v0.5.0",
+        "build_tag": "b11146",
+        "commit": "7fe450e19305b828c199d602c23a8337aaa1f03b",
+        "asset": "llama-b11146-bin-ubuntu-x64.tar.gz",
+        "asset_url": "https://github.com/ggml-org/llama.cpp/releases/download/b11146/llama-b11146-bin-ubuntu-x64.tar.gz",
+        "asset_sha256": "c150306eb16b5ab696f76a8bdf810c35fd98a24e82158742e6fa28f420ff8410",
+        "asset_sha256_source": "GitHub release asset digest; verified against downloaded archive",
+        "api": "OpenAI-compatible /v1/chat/completions",
+        "thinking_control": {
+          "server_default": "--reasoning-budget 0",
+          "request_json": "chat_template_kwargs: {\"enable_thinking\": false}",
+          "note": "The current compact JSON prompt passed both 17-request E4B/12B comparisons; generation used thinking off and temperature 0. Model-specific quality and timing findings are recorded in development-status.md."
+        },
+        "model": {
+          "repo": "google/gemma-4-E4B-it-qat-q4_0-gguf",
+          "revision": "4b4a2c1d584be7264f87aac328a1bc739ce81b6c",
+          "filename": "gemma-4-E4B_q4_0-it.gguf",
+          "sha256": "676c35070db6dbe52f93e9c864ee0fba4eddea94b9c875d9cb10daff453fbaee",
+          "size_bytes": 5154941280
+        },
+        "platform": "Linux x86_64",
+        "runtime_version": "0.5.0-dev (build 11146, commit 7fe450e19); GNU 11.4.0",
+        "cpu_only": true,
+        "server_settings": {
+          "host": "127.0.0.1",
+          "port": 18766,
+          "context_tokens": 4096,
+          "threads": 8,
+          "gpu_layers": 0,
+          "jinja": true,
+          "reasoning_budget": 0,
+          "chat_template_kwargs": {
+            "enable_thinking": false
+          },
+          "web_ui": false
+        }
+      },
+      "runtime_binary_sha256": "22de090746c114569367998ec930b28f27f12e078e593ff21175a54b409d26fe",
+      "prompt_builder_source_sha256": "d45a5beac81d67106abeb9f28d66c9179c93176c8e2e527e66aab64908de6a5b"
+    },
+    "hymt2": {
+      "repo": "tencent/Hy-MT2-1.8B-GGUF",
+      "revision": "a0c709d9fac510f2c807aa3af52872340dc37a4a",
+      "path": "/media/psikosen/newvolume/jread-hymt2/model/Hy-MT2-1.8B-Q8_0.gguf",
+      "sha256": "5c3fe0b1408a5ceb0143184ef247b11b579c525f4b02b060e6c851bb76fef1a4",
+      "size_bytes": 1908528192,
+      "quantization": "Q8_0",
+      "alias": "jread-eval-hymt2-q8"
+    }
+  },
+  "stage_order": [
+    "readiness",
+    "hymt_baseline",
+    "gemma_controls",
+    "hymt_glossary",
+    "gemma_glossary",
+    "hymt_following",
+    "gemma_following"
+  ],
+  "stage_ids": {
+    "readiness": [
+      "H01",
+      "H02"
+    ],
+    "hymt_baseline": [
+      "fleurs_1632",
+      "fleurs_1638",
+      "fleurs_1604",
+      "fleurs_1607",
+      "fleurs_1641",
+      "fleurs_1569",
+      "fleurs_1571",
+      "fleurs_1514",
+      "fleurs_1592",
+      "fleurs_1559",
+      "fleurs_1643",
+      "fleurs_1639",
+      "fleurs_1539",
+      "fleurs_1649",
+      "fleurs_1517",
+      "fleurs_1627",
+      "fleurs_1622",
+      "fleurs_1562",
+      "fleurs_1636",
+      "fleurs_1647",
+      "nakano_01",
+      "nakano_02",
+      "nakano_03",
+      "nakano_04",
+      "nakano_05",
+      "saga_01",
+      "saga_02",
+      "saga_03",
+      "saga_04",
+      "H01",
+      "H02",
+      "H03",
+      "H04",
+      "H05",
+      "H06",
+      "H07",
+      "H08"
+    ],
+    "gemma_controls": [
+      "H01",
+      "H02",
+      "H03",
+      "H04",
+      "H05",
+      "H06",
+      "H07",
+      "H08"
+    ],
+    "hymt_glossary": [
+      "saga_02",
+      "H05",
+      "H06"
+    ],
+    "gemma_glossary": [
+      "saga_02",
+      "H05",
+      "H06"
+    ],
+    "hymt_following": [
+      "H07",
+      "H08"
+    ],
+    "gemma_following": [
+      "H07",
+      "H08"
+    ]
+  },
+  "lock": "/media/psikosen/newvolume/jread-verifier/evaluation.lock",
+  "ports": [
+    18767,
+    18768
+  ],
+  "bindings": [
+    {
+      "path": "/home/psikosen/.local/share/JREAD/models/gemma4-e4b/gemma-4-E4B_q4_0-it.gguf",
+      "sha256": "676c35070db6dbe52f93e9c864ee0fba4eddea94b9c875d9cb10daff453fbaee"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml-base.so",
+      "sha256": "5edd28e54a19d75ccf3bcd1a729a5d5327f822514c274969b8b83d878e5ef3bd"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml-base.so.0",
+      "sha256": "5edd28e54a19d75ccf3bcd1a729a5d5327f822514c274969b8b83d878e5ef3bd"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml-base.so.0.25.1",
+      "sha256": "5edd28e54a19d75ccf3bcd1a729a5d5327f822514c274969b8b83d878e5ef3bd"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml-cpu-alderlake.so",
+      "sha256": "8c0a8861351221a1dbe5fd43df5fbdbb00aeff0face86aed47ddc166323c2228"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml-cpu-cannonlake.so",
+      "sha256": "efc6d0d0cb92e5ff7c3a2b2a995068a810e72aab23174bd6d84484f92e145643"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml-cpu-cascadelake.so",
+      "sha256": "0e12697fe79d6209486fb4ab6e38ee279b8b80481208a7e1f7b61e803af6ee8c"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml-cpu-cooperlake.so",
+      "sha256": "5cb2ce6bda931e19742c0cbec44ed258ac57afe2801cc2324d752a19bf8d6707"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml-cpu-haswell.so",
+      "sha256": "984064c44e5a92558e01ace8cf18cde33356d2d21bdb93166f0faf57885fe234"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml-cpu-icelake.so",
+      "sha256": "6cefaed8ad0d4b7e2e661e850b16936e4265283cb7fda004b6c6923d87e9241f"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml-cpu-ivybridge.so",
+      "sha256": "a90c3b1a96f150cba36e0abae4dd8d15384db29fee49106c0f4664619ec01fe3"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml-cpu-piledriver.so",
+      "sha256": "bb4d2dfe4cb107b06d7841904bf87460c42854dbf9c56d9dc3eed861e7a7bb92"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml-cpu-sandybridge.so",
+      "sha256": "ced91e5db35c922b2e081daa079c0057f3862ad285f92dd1cfd1f6847985701a"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml-cpu-sapphirerapids.so",
+      "sha256": "b19ce9b822c569e514c8a99f6df2996f553eb295838c78bd544d791a124d3919"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml-cpu-skylakex.so",
+      "sha256": "cf4a4bc0daf9ca620d1df6ee66a7d9132899f33e3ff797d6b6fb5b29911ccbc0"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml-cpu-sse42.so",
+      "sha256": "4f4e9d6bf9a3f3a6c709fb5e48c684d1fa4c931db23ee0f2c0bbf14d78fff1f4"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml-cpu-x64.so",
+      "sha256": "2cf499f61c4e9888c47e404f9359e53e9ca79cf1f33e5b5bd706ce4642051149"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml-cpu-zen4.so",
+      "sha256": "e636cd0e2c623b7fb74ed32e76a6d6139ee1dba1f8c552dd2c497a242db96b52"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml-rpc.so",
+      "sha256": "bd8dffadf26f130935742016b8f8711bb35e3187f16f44d75db5639daa2c6cfa"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml.so",
+      "sha256": "569c53469aceca5dd357d2c3e1570014ed73e676abb08d44971be4cb784d855c"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml.so.0",
+      "sha256": "569c53469aceca5dd357d2c3e1570014ed73e676abb08d44971be4cb784d855c"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libggml.so.0.25.1",
+      "sha256": "569c53469aceca5dd357d2c3e1570014ed73e676abb08d44971be4cb784d855c"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libllama-batched-bench-impl.so",
+      "sha256": "51708700c784ce0a58214aad58f5a259b519d94cb625c7e7c9e8435f9e94b460"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libllama-bench-impl.so",
+      "sha256": "bec94a1255db087838211878fda2be5528ff5886d2088551f48446473bd413c0"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libllama-cli-impl.so",
+      "sha256": "55c9a9db29646b8a88d87f276f10278b9c7ed835a9672d442e9ecafad1c0cdc1"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libllama-common.so",
+      "sha256": "6686de2e183ac053f6d965bd06af6c4eb62aff44353a3c2664b854c72a492dda"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libllama-common.so.0",
+      "sha256": "6686de2e183ac053f6d965bd06af6c4eb62aff44353a3c2664b854c72a492dda"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libllama-common.so.0.5.0",
+      "sha256": "6686de2e183ac053f6d965bd06af6c4eb62aff44353a3c2664b854c72a492dda"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libllama-completion-impl.so",
+      "sha256": "251871f192308edca2b2d7ec253832e27aca2aafc18c242a7f1c8418496efa0a"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libllama-fit-params-impl.so",
+      "sha256": "64659e27caad6d884fa093d33b9aa631a4def6cbbff0aa85bf6218a153565cc2"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libllama-perplexity-impl.so",
+      "sha256": "b37f8c9dd0f6b2e43df448e18d1afb81ca31e979d865f49e81f2c3014a0a9409"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libllama-quantize-impl.so",
+      "sha256": "510e169cfd384703bd504c92be4871959530f593ad5f7dbd32e04fcec6eaf3d5"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libllama-server-impl.so",
+      "sha256": "448901d999734830ff3ba6d81b3df230910ee534ac4584571fce4ce1896d450d"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libllama.so",
+      "sha256": "7e3dd3d60fada6e76cc0bbccd076c90e0b2f1c01cc1c18bf3bb0b2df5ee2c67f"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libllama.so.0",
+      "sha256": "7e3dd3d60fada6e76cc0bbccd076c90e0b2f1c01cc1c18bf3bb0b2df5ee2c67f"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libllama.so.0.5.0",
+      "sha256": "7e3dd3d60fada6e76cc0bbccd076c90e0b2f1c01cc1c18bf3bb0b2df5ee2c67f"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libmtmd.so",
+      "sha256": "9bfb7fc0005de64f160763476a326a54a9a56ffd0a5b1e24111981a90c02d84f"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libmtmd.so.0",
+      "sha256": "9bfb7fc0005de64f160763476a326a54a9a56ffd0a5b1e24111981a90c02d84f"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/libmtmd.so.0.5.0",
+      "sha256": "9bfb7fc0005de64f160763476a326a54a9a56ffd0a5b1e24111981a90c02d84f"
+    },
+    {
+      "path": "/home/psikosen/.local/share/JREAD/runtime/llama-cpp/llama-server",
+      "sha256": "22de090746c114569367998ec930b28f27f12e078e593ff21175a54b409d26fe"
+    },
+    {
+      "path": "/home/psikosen/JREAD/docs/runtime.json",
+      "sha256": "90125fd934819e802f431916a9d142bd2a8dfb3f902fc80835cd811da1cbc1c5"
+    },
+    {
+      "path": "/home/psikosen/JREAD/jread/__init__.py",
+      "sha256": "20c8e430ededc2143396e553a3c67aac4ec483ef54efdfcb18a31cb162ca0646"
+    },
+    {
+      "path": "/home/psikosen/JREAD/jread/engine.py",
+      "sha256": "59feb00be3329abe96b669303a434cf30acc35cd8111c76ea8cfef4623d14279"
+    },
+    {
+      "path": "/home/psikosen/JREAD/jread/gemma.py",
+      "sha256": "82c500f169e26b7e8d53df874fcb3b091d095a6bc9e5c3957f67d4ce05491b49"
+    },
+    {
+      "path": "/home/psikosen/JREAD/jread/store.py",
+      "sha256": "3326282d5c7df7d6f955eb50207d1b82c68b68eb416f1d13323cca3eb0b32863"
+    },
+    {
+      "path": "/home/psikosen/JREAD/jread/subtitles.py",
+      "sha256": "b3a0e5d3abe2b563f4a61f153902a670ebbbb1636b88a0d166b7baa01dcdc132"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_asr_recovery_translation.py",
+      "sha256": "d106777cb5bd5a7e2168fa6639b957807f660e196471f9a47c636cf874d7e755"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_hymt2.py",
+      "sha256": "c16ff26da3e5844264b66d01fb196694da0f839027cf4267d326f2e8a0f2d7c1"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_index_translate.py",
+      "sha256": "aee76a596071ba9087b080af490fcd50648c5c770981a46c620e3d90ebab4b0c"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_speech.py",
+      "sha256": "5cbc62431d81054513a0f11876277393e9c4528ff57692456e02949dbf1ce142"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_streaming_combinations.py",
+      "sha256": "23de767fb83a05ea36712fe76ea370eabf08dbfd8dce8c68404bc84ccbd5a94c"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_streaming_translation.py",
+      "sha256": "75c275d79898aa0eb28aca0c964cfb3f8e278f1d02ae982a44b949c22fce355c"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_translation_ensemble.py",
+      "sha256": "92b431bab0ea6d5bcabfa51c301135c3ce27e560d0ecdca8affbdb73ef8aff05"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/replay_streaming_boundaries.py",
+      "sha256": "5eafb6211597cfda06f900bc639b033fbe402edc67b07e6022bd354a5db7c2cb"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-hymt2/data/glossary.json",
+      "sha256": "d62b61c97650b79e2ec892a8f1e519f0102e722962c0da342fe0b88aa4c9c378"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-hymt2/data/request-plan.json",
+      "sha256": "cface8b03423217ae3cdafc62680035e0ee9774436e8d9a3c718305cee02eb7d"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-hymt2/data/sources.json",
+      "sha256": "2577ad284194401f92d9f319d1cb765eafce28a18221e45a0f164655cf04b30a"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-hymt2/model/.verified",
+      "sha256": "11b0608c5eda175b4f8ebed53be9ba4337e7b6feb439d07439a4ac8ae6078bc5"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-hymt2/model/Hy-MT2-1.8B-Q8_0.gguf",
+      "sha256": "5c3fe0b1408a5ceb0143184ef247b11b579c525f4b02b060e6c851bb76fef1a4"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-hymt2/model/LICENSE.txt",
+      "sha256": "a1d52d448f81c584a47c583e19dfab2d3851c7c84431b07baee093c1113ed114"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-hymt2/model/README.md",
+      "sha256": "6811073b8b3d20a9a4db959c2b3f36e39e66bdb953cfecbdd8223fc20cc9a05b"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-hymt2/model/download-status.json",
+      "sha256": "f6cf5657d69cfbe350e0ed536bb114927baba449daafe87bcc240446a2f433e8"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-hymt2/model/gguf-inspection.json",
+      "sha256": "566ef3be64baf6367e5459efd0c4bbf41f7223cd3fd2d2df6f7c298ee9bfb0de"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-hymt2/model/provenance.json",
+      "sha256": "fed3a8074ba8b42420a51515d58979bd53c69c040c50b3c497f06d94ec15a67e"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-hymt2/review/fresh-controls.json",
+      "sha256": "d0c703c3833b1997771387fbbde226ec6aa2dc05743bdcc54e6ba3fcd0aec274"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-hymt2/review/gemma-history.json",
+      "sha256": "8daecbe452f87e94c0b6a37b1f3f926e9765b35da356efd74b5d685fa74574ef"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-hymt2/review/protocol.json",
+      "sha256": "2696341b839e35308bb0de912beefb3445074d150e22448b3458d49e280b86a1"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-hymt2/review/rubrics.json",
+      "sha256": "6369822c7a72da705f05a3bb9142ff02d2abfc890cf9bdf99cbdb696c1415e66"
+    }
+  ],
+  "interpretation": "Model/prompt/package comparison with frozen greedy decoding. Historical Gemma20 and exact saved anime9 remain reference outputs. Fresh eight controls are contemporaneous; synthetic and not broad anime accuracy.",
+  "production_changed": false,
+  "original50_used": false
+}

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>JREAD — Japanese subtitles, understood</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="JREAD home"><span class="brand-mark">J</span><span>JREAD</span></a>
+    <p class="topline">Your media stays on this device</p>
+    <div class="connection"><span class="dot" id="connection-dot"></span><span id="connection-label">Connecting…</span></div>
+  </header>
+  <main id="home">
+    <section class="hero">
+      <div><p class="eyebrow">JAPANESE → ENGLISH</p><h1>Watch the story.<br><span>Read every line.</span></h1><p class="hero-copy">Create, refine, and keep subtitles on your computer. Your video never leaves this device.</p></div>
+      <div class="hero-orbit" aria-hidden="true"><span>字幕</span><i></i><b></b></div>
+    </section>
+
+    <section class="panel pairing-panel" aria-labelledby="pair-title">
+      <div class="pair-box"><div><strong id="pair-title">Browser extension pairing code</strong><p class="muted">Enter this code in the JREAD extension and click Pair. Use Refresh code if it expires.</p></div><button class="button secondary" id="pair-button">Refresh code</button><div class="pair-code" id="pair-code" hidden><code id="pair-value" aria-label="Pairing code"></code><span id="pair-countdown" role="status"></span><button class="text-button" id="copy-pair">Copy</button></div><p class="error-inline" id="pair-error" role="alert" hidden></p></div>
+    </section>
+
+    <section class="setup panel" aria-labelledby="setup-title">
+      <div class="section-head"><div><p class="eyebrow">READY WHEN YOU ARE</p><h2 id="setup-title">Local engine</h2></div><span class="badge" id="engine-badge">Checking</span></div>
+      <div class="engine-grid">
+        <div class="engine-copy"><div class="engine-model" id="engine-model">Checking model…</div><div class="muted" id="engine-detail">Looking for the local subtitle engine.</div><div class="disk-note" id="disk-note"></div></div>
+        <label>Speech recognition<select id="model-select" aria-describedby="model-note"><option value="small">Whisper small · faster</option><option value="medium">Whisper medium · more detail</option><option value="large-v3-turbo">Large v3 Turbo</option></select></label>
+        <label>Speech device<select id="device-select"><option value="auto">Automatic</option><option value="cpu">CPU</option><option value="cuda">NVIDIA GPU</option></select></label>
+        <div class="engine-actions"><button class="button primary" id="model-action" disabled>Check model</button><button class="button quiet" id="remove-model" hidden>Remove model</button></div>
+      </div>
+      <p class="muted" id="model-note">Large v3 Turbo requires Gemma for English translation.</p>
+      <div class="translator-controls">
+        <label>English translation<select id="translator-select"><option value="gemma4">Gemma 4 E4B</option><option value="gemma4-12b">Gemma 4 12B</option><option value="whisper">Whisper translation · baseline</option></select></label>
+        <button class="button primary" id="gemma-action" hidden>Install Gemma 4 E4B</button>
+        <button class="button quiet" id="remove-gemma" hidden>Remove Gemma 4</button>
+        <p class="muted" id="translator-note">Choose the model that translates the Japanese transcript.</p>
+      </div>
+      <div class="translator-controls" aria-label="Caption accuracy options">
+        <label>Show glossary<select id="glossary-select"><option value="none">No show glossary</option><option value="aikatsu_pripara">Aikatsu × PriPara names</option></select></label>
+        <label><input type="checkbox" id="caption-context"> Remember recent live dialogue</label>
+        <label><input type="checkbox" id="caption-boundaries"> Combine overlapping live captions</label>
+        <p class="muted">These options support Gemma translation. Use a show glossary only for that show. Live dialogue memory clears when you seek or change videos.</p>
+      </div>
+      <div class="engine-progress" id="engine-progress" hidden><span class="spinner" aria-hidden="true"></span><span>Downloading the selected model…</span></div>
+      <p class="error-inline" id="engine-error" role="status" hidden></p>
+    </section>
+
+    <section class="work-grid">
+      <section class="panel import-panel" aria-labelledby="import-title">
+        <div class="section-head"><div><p class="eyebrow">START A LIBRARY</p><h2 id="import-title">Add a video or subtitle file</h2></div><span class="step">01</span></div>
+        <div class="import-tabs" role="tablist" aria-label="Import type"><button class="tab active" id="media-tab" role="tab" aria-selected="true">Video</button><button class="tab" id="subs-tab" role="tab" aria-selected="false">SRT / WebVTT</button></div>
+        <label class="dropzone" for="file-input" id="dropzone"><input id="file-input" type="file" accept="video/*,.mkv,.mov,.webm,.mp4,.wav,.mp3,.flac,.ogg,.m4a,.aac"><span class="upload-icon" aria-hidden="true">↑</span><strong id="file-label">Choose a video or audio file</strong><span class="muted" id="file-help">Video or WAV, MP3, FLAC, OGG, M4A, AAC · up to 2 GB</span></label>
+        <label class="field">Episode title <span class="optional">optional</span><input id="title-input" type="text" maxlength="240" placeholder="e.g. The first morning"></label>
+        <button class="button primary wide" id="generate-button" disabled>Generate Japanese → English <span aria-hidden="true">↗</span></button>
+        <p class="form-note" id="import-note">Choose a video to create a local subtitle job.</p>
+        <p class="error-inline" id="import-error" role="alert" hidden></p>
+      </section>
+
+      <section class="panel prefs-panel" aria-labelledby="prefs-title">
+        <div class="section-head"><div><p class="eyebrow">YOUR VIEW</p><h2 id="prefs-title">Caption appearance</h2></div><span class="step">02</span></div>
+        <label class="field">Caption size <span class="range-value" id="font-size-value">28 px</span><input type="range" id="font-size" min="18" max="48" step="1" value="28"></label>
+        <label class="check-row"><input type="checkbox" id="show-japanese"><span><strong>Show Japanese above English</strong><small>Keep the original line available while you watch.</small></span></label>
+        <label class="check-row"><input type="checkbox" id="caption-background" checked><span><strong>Dark caption background</strong><small>Keep text readable over bright scenes.</small></span></label>
+        <label class="field position-field">Vertical position <span class="range-value" id="caption-position-value">10% from bottom</span><input type="range" id="caption-position" min="0" max="40" step="1" value="10"></label>
+        <div class="caption-sample" id="caption-sample" aria-label="Caption preview"><span class="sample-jp" id="sample-jp" hidden>朝の光が窓から差し込む。</span><span>Morning light comes through the window.</span></div>
+      </section>
+    </section>
+
+    <section class="library-section" aria-labelledby="library-title">
+      <div class="section-head library-head"><div><p class="eyebrow">ON THIS DEVICE</p><h2 id="library-title">Your subtitle library</h2><p class="muted" id="library-count">Loading your episodes…</p></div><label class="search"><span aria-hidden="true">⌕</span><input id="search-input" type="search" placeholder="Find an episode" aria-label="Search episodes"></label></div>
+      <div class="empty-state panel" id="empty-state"><div class="empty-icon" aria-hidden="true">文</div><h3>Your library starts here</h3><p>Import a video to generate Japanese → English captions, or bring in an SRT or WebVTT track.</p><button class="button secondary" id="empty-import">Choose a file</button></div>
+      <p class="error-inline" id="library-error" role="alert" hidden></p>
+      <div class="job-list" id="job-list" aria-live="polite"></div>
+    </section>
+
+    <section class="detail panel" id="detail" aria-labelledby="detail-title" hidden>
+      <div class="section-head detail-head"><div><p class="eyebrow">SUBTITLE WORKSPACE</p><h2 id="detail-title">Episode</h2></div><button class="icon-button" id="close-detail" aria-label="Close episode">×</button></div>
+      <div class="detail-grid">
+        <div class="player-wrap"><video id="video" controls playsinline preload="metadata" aria-label="Selected episode"></video><div class="no-video" id="no-video">This subtitle track has no attached video.<br><span>Import a video to create a playable episode.</span></div><div class="player-meta" id="player-meta"></div></div>
+        <div class="cue-pane"><div class="cue-head"><div><strong>Captions</strong><span class="muted" id="cue-count"></span></div><div class="export-actions"><button class="text-button" id="export-srt">SRT ↓</button><button class="text-button" id="export-vtt">VTT ↓</button></div></div><div class="cue-list" id="cue-list"></div><div class="cue-empty" id="cue-empty" hidden>No captions yet. They will appear here when the job completes.</div></div>
+      </div>
+      <p class="error-inline" id="detail-error" role="alert" hidden></p>
+    </section>
+
+    <section class="privacy-note"><span aria-hidden="true">◈</span><p><strong>Private by design.</strong> Your media, captions, and model stay on this computer. Delete an episode from the library whenever you want to remove its saved data.</p></section>
+    <footer><span>Clears episodes and subtitle files. Downloaded models stay installed; remove them above.</span><button class="text-button danger-text" id="delete-all">Clear subtitle library</button></footer>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <dialog id="confirm-dialog" aria-labelledby="confirm-title"><form method="dialog"><div class="eyebrow">PLEASE CONFIRM</div><h2 id="confirm-title">Delete saved data?</h2><p id="confirm-copy">This action cannot be undone.</p><div class="dialog-actions"><button class="button quiet" value="cancel">Keep it</button><button class="button danger" id="confirm-delete" value="confirm">Delete</button></div></form></dialog>
+</body>
+</html>

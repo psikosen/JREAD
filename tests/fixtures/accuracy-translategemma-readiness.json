@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "status": "frozen",
+  "stage": "readiness",
+  "runner_sha256": "dee8724b8d4571edeff0ecb3276d0095155c8e07ef3c3e1f9f6244c3eac6908b",
+  "runtime_manifest_sha256": "61fdaa94588877d63d48f00bc3a80e86f4c79d023c7dbaf2c075ae6aee1c5521",
+  "helper_sha256": {
+    "pilot": "4f08756bcab33c873b0068a3ebcbb1458a43fbb79114e0cd6e02bc643dbabf68",
+    "audio_readiness": "ebed0dbc34a01181314cd3bcac8cb209879f7a3ccc853ef54477af377aa62136"
+  },
+  "model": {
+    "directory": "/media/psikosen/newvolume/jread-translategemma/model",
+    "repo_id": "google/translategemma-4b-it",
+    "revision": "10042cb0e6e7fdce748996a71dc3dc432a4e0c89",
+    "provenance_sha256": "cb31577c511a469cf0f5db5ac7633b6ed408e744f1bd66c6c46ff3c1f95f1993"
+  },
+  "input_manifest": {
+    "path": "/media/psikosen/newvolume/jread-translategemma/data/input-manifest-v1.json",
+    "sha256": "d90cb4ef6971afed78dbb8584b5fe8c54cd3133c39574d2dccd5146ed03c1e14"
+  },
+  "data": {
+    "path": "/media/psikosen/newvolume/jread-translategemma/data/readiness-inputs-v1.jsonl",
+    "sha256": "e24dd0e6756fde731de9a113221e9305d8f92dd3696b401bdf6a48b6cf7228d7",
+    "expected_ids": [
+      "synthetic-negation",
+      "synthetic-roles",
+      "synthetic-hearsay-time"
+    ]
+  },
+  "generation": {
+    "do_sample": false,
+    "temperature": 0,
+    "seed": 17,
+    "num_beams": 1,
+    "max_new_tokens": 256
+  },
+  "readiness_gate": null,
+  "quality_gate": {
+    "rubric": {
+      "path": "/media/psikosen/newvolume/jread-translategemma/data/readiness-rubric-v1.json",
+      "sha256": "36bdf96e0d8b01f585c0b733b3614b5de92a5a51762567f1123e52480eb3fc6e"
+    },
+    "rule": "All 3 outputs nonempty, EOS completed, and major meaning preserved under frozen rubric; no retries or post-output prompt changes. Root review before benchmark."
+  },
+  "limits": [
+    "Readiness controls first; root technical review and protocol freeze required before GPU.",
+    "Separate root/independent meaning review before development, preserve all unsuccessful output.",
+    "Translation-only challenger on identical saved sources; no original50 heldout, model tuning or production change.",
+    "Anime capture pending source identification; new window frozen before model outputs.",
+    "GPU BF16 challenger timing cannot establish speedup over historical CPU Q4 E4B baseline."
+  ],
+  "implementation_limits": {
+    "max_input_tokens": 1792,
+    "maximum_new_tokens": 256,
+    "dtype": "bfloat16",
+    "attention": "sdpa",
+    "quantization": null,
+    "cpu_threads": 4,
+    "minimum_free_gpu_mib": 16000,
+    "owned_lock": "/media/psikosen/newvolume/jread-finetune/runtime/audio-readiness.lock"
+  },
+  "root_freeze": {
+    "technical_review": {
+      "path": "/home/psikosen/JREAD/test-results/translategemma-preparation-review.json",
+      "sha256": "d60aedf88a269d9b0d8258ffe9c52c7d7fb21ce4f74ee32ccc65852fa936f43e"
+    },
+    "model_verifier_repair": {
+      "path": "/home/psikosen/JREAD/test-results/translategemma-verifier-repair.json",
+      "sha256": "0b208b54f74016395ed5fa72b9db5b9103667df7731c3d9c2d08cc722ac39fbd"
+    },
+    "cpu_report": {
+      "path": "/media/psikosen/newvolume/jread-translategemma/runs/readiness-cpu-v1/report.json",
+      "sha256": "0bef2bd3330adb5d5c5e9f10fe960a4a93927cc1a4536d42677dac7eec60bc09"
+    },
+    "scope": "Only three frozen synthetic controls. No production change; benchmark follows only after unchanged root and independent meaning gates."
+  }
+}

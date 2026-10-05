@@ -1,0 +1,12 @@
+{
+  "dataset": "google/fleurs",
+  "config": "ja_jp",
+  "split": "test",
+  "row": 0,
+  "source": "https://huggingface.co/datasets/google/fleurs/resolve/refs%2Fconvert%2Fparquet/ja_jp/test/0000.parquet",
+  "reference": {
+    "raw_transcription": "インターネットで「敵対的環境コース」について検索すると、おそらく現地企業の住所が出てくるでしょう。",
+    "transcription": "インターネットで 敵対的環境コース について検索すると おそらく現地企業の住所が出てくるでしょう",
+    "id": 1828
+  }
+}

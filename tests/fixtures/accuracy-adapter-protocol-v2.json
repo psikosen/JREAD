@@ -1,0 +1,221 @@
+{
+  "version": 2,
+  "status": "frozen",
+  "purpose": "One data-expansion followup to the unsuccessful v1 E4B QLoRA pilot; identical model, hyperparameters and runner. User explicitly requested continuation after the v1 stop.",
+  "model": {
+    "repository": "google/gemma-4-E4B-it-qat-q4_0-unquantized",
+    "revision": "476025a01dbf99361c062bbeca3d6a76bb4c4566",
+    "directory": "/media/psikosen/newvolume/jread-finetune/model",
+    "quantization": "bitsandbytes NF4, double quantization, bfloat16 compute",
+    "baseline": "Adapter disabled on the identical loaded HF/NF4 checkpoint. This differs from historical CPU Q4_0 GGUF inference; those results remain a separate comparison.",
+    "provenance_sha256": "f96ce68e4477d3c3a72fa92e0d2d4b9e1444231bb8a35756be4b78f693c5fb70"
+  },
+  "data": {
+    "status": "frozen_and_tokenization_validated",
+    "change": "Keep all128 independently reviewed clean training groups and original30 accepted actual-Whisper variants; add only accepted actual-Whisper variants from the previously untranscribed96 training groups. Do not force a count or change targets based on translation outputs.",
+    "fresh_validation": "Exactly20 unused official-dev source groups in the original deterministic hash-next order, excluding all used train/validation near-duplicate source/target/audio and original70 FLEURS by internal guard. Root and independent source/target/rubric review before any model translations.",
+    "previous_validation": "The exposed v1 CoVoST20 remain a historical regression record, excluded from new training and fresh validation. No automatic regeneration of those cases.",
+    "training_noise_review": "Independently review every new ASR transcript; preserve original clean target, exclude training variants requiring unsupported missing or changed meaning. Reconcile disagreements conservatively.",
+    "protection": "tests/prepare_adapter_data.py checks all70 existing evaluation references internally without printing heldout text or opening heldout audio; this is a lexical contamination guard, not proof against semantic or pretraining overlap.",
+    "source": {
+      "repository": "https://github.com/ku-nlp/covost2NativeJa",
+      "revision": "52f01d398c24017d104021897e022676117bbe7b",
+      "license": "CC BY 4.0 per source repository",
+      "limitations": "Native male read speech; train/dev speakers may overlap. Not representative of spontaneous dialogue or anime. Local pilot only; preserve original corpus license/attribution metadata."
+    },
+    "asr_remaining_report": "/media/psikosen/newvolume/jread-finetune/data/asr-train-remaining-v1/report.json",
+    "asr_remaining_report_sha256": "2f3cc4898272b027f4d5d3abf543f61e74daf38391867aa5be8779e12656a542",
+    "manifest": "/media/psikosen/newvolume/jread-finetune/data/pilot-v2/data-manifest.json",
+    "manifest_sha256": "ce73f895bfae3c22600bedd836ea0dcd512885d6215ea0cb11479cdc08cc940d",
+    "data_sha256": "faba9886ecfedb504fa9834b293df40d76bf1d3563a3e1b4a8a6707c18ee9cd1",
+    "validation_rubric": "/media/psikosen/newvolume/jread-finetune/data/validation-v2-staging/validation-rubric.json",
+    "validation_rubric_sha256": "0d8a4b0bc5f54432e0bfa30c73a00f01733c3083e90539feab97e2587c76dcaf",
+    "cpu_validation_report": "/media/psikosen/newvolume/jread-finetune/runs/cpu-pilot-v2/report.json",
+    "cpu_validation_sha256": "e10750642b240f22c8d693ae765454e8dc812d2c457dda44ee6b9d3b02791608",
+    "actual_counts": {
+      "training_clean": 128,
+      "training_whisper": 119,
+      "training_source_groups": 128,
+      "validation_clean": 20,
+      "validation_whisper": 20,
+      "validation_source_groups": 20,
+      "training_rows": 247,
+      "new_whisper_variants": 89,
+      "retained_substantial_training_repairs": 8
+    },
+    "limitations": [
+      "Only8 retained training variants contain substantial ASR lexical errors; most additions are equivalent spellings or punctuation.",
+      "Fresh validation has20 independent text/sourcegroups, but4 clips share a training speaker; all are native read speech.",
+      "Larger data means31 optimizersteps versus20 in v1, so this tests a training-data/exposure package, not an isolated causal effect of repair examples."
+    ],
+    "speaker_overlap": {
+      "metadata_field": "client_id mapped unchanged to provenance.speaker_id",
+      "frozen_pilot_sha256": "cd9f4851ba14fdc984746000d702677ce78349d5e4907e95b4011b7caa60d66d",
+      "clean_train_count": 128,
+      "clean_train_speaker_counts": {
+        "spk1": 22,
+        "spk2": 42,
+        "spk3": 51,
+        "spk4": 6,
+        "spk5": 7
+      },
+      "old_clean_validation_speaker_counts": {
+        "spk1": 3,
+        "spk5": 1,
+        "spk6": 16
+      },
+      "new_validation_speaker_counts": {
+        "spk1": 4,
+        "spk6": 16
+      },
+      "new_clips_with_training_speaker": 4,
+      "new_clips_without_training_speaker": 16,
+      "new_clip_ids_with_training_speaker": [
+        "covost2-nativeja-validation-dev0504",
+        "covost2-nativeja-validation-dev0623",
+        "covost2-nativeja-validation-dev0535",
+        "covost2-nativeja-validation-dev0627"
+      ],
+      "selection_changed_for_speaker_overlap": false,
+      "limitation": "Four new clips use spk1, already in training; sixteen use spk6, absent from training. Both speakers appeared in the old validation set. This is fresh text/group validation of native read speech, not wholly speaker-disjoint or spontaneous/anime speech validation. Speaker IDs are not inferred personal identities."
+    },
+    "review_artifacts": {
+      "fresh_candidates": {
+        "path": "/media/psikosen/newvolume/jread-finetune/data/validation-v2-staging/candidates-20.jsonl",
+        "sha256": "5b54a729484d14037bb71f5fc988c004c2253d6f8d1b9b3fc52a822abc533b17"
+      },
+      "fresh_selection_audit": {
+        "path": "/media/psikosen/newvolume/jread-finetune/data/validation-v2-staging/technical-audit.json",
+        "sha256": "03e7c39ef91165d720eadf5fec0c7cb66b1848bbad9c32b26a27fde86e0ba9eb"
+      },
+      "fresh_root_review": {
+        "path": "/media/psikosen/newvolume/jread-finetune/data/validation-v2-staging/root-clean-review.json",
+        "sha256": "f8214daac9fd614b18b70917b9944489bedfed886ef2d57c33bcda39c266198a"
+      },
+      "fresh_independent_review": {
+        "path": "/media/psikosen/newvolume/jread-finetune/data/validation-v2-staging/bilingual-review-20.json",
+        "sha256": "9bd7ebd690d9c2748acb5662cd175afd70caa3388dec3933cbeea0c9cac83cf2"
+      },
+      "training_noise_reconciliation": {
+        "path": "/media/psikosen/newvolume/jread-finetune/data/asr-train-remaining-v1/noise-review-reconciliation.json",
+        "sha256": "6c87cae4fb29a68fcbd11e53529be8d9c84923126839dc00f93bfac2d1927783"
+      },
+      "fresh_asr_report": {
+        "path": "/media/psikosen/newvolume/jread-finetune/data/asr-validation-v2/report.json",
+        "sha256": "31631b45a90b21c22a86746098d95fe021770caeb6f8166cfd143cbc9266701e"
+      },
+      "fresh_asr_root_review": {
+        "path": "/media/psikosen/newvolume/jread-finetune/data/asr-validation-v2/root-noise-review.json",
+        "sha256": "7fb84a6da4f02402e6ecb8c2985bb55ff66e3a010b3b2c28fe7a548a618942b8"
+      },
+      "fresh_asr_independent_review": {
+        "path": "/media/psikosen/newvolume/jread-finetune/data/asr-validation-v2/independent-noise-review.json",
+        "sha256": "501e8b4ffc0400a4a475589f2370ce0eec0227e29dbd40f4eaff667161e70865"
+      }
+    }
+  },
+  "smoke": {
+    "source": "妹は昨日、駅で赤い傘を買いました。",
+    "target": "My younger sister bought a red umbrella at the station yesterday.",
+    "rule": "One independent handcrafted readiness example, separate disposable adapter. Require finite loss, nonzero adapter gradients and weight update, adapter save/reload, unchanged adapter-off outputs. The real pilot starts afresh from base weights.",
+    "report": "/media/psikosen/newvolume/jread-finetune/runs/smoke-v1/report.json",
+    "report_sha256": "d8b54ff1b20e68b937db2e1cd6d154c883a0686563d0aed37821cbd21f4fe4c6",
+    "status": "passed",
+    "trainable_parameters": 2269184,
+    "peak_gpu_allocated_bytes": 21953382400,
+    "subsequent_runner_edits": "Only artifact verification, evaluation coverage/error reporting and frozen protocol hash binding; model preparation, assistant mask, optimizer and training loop unchanged from passing smoke."
+  },
+  "training": {
+    "rank": 8,
+    "alpha": 16,
+    "dropout": 0.05,
+    "target_modules": ".*language_model\\..*\\.(q_proj|v_proj)",
+    "train_embeddings_or_lm_head": false,
+    "learning_rate": 0.0001,
+    "epochs": 1,
+    "micro_batch_size": 1,
+    "gradient_accumulation_steps": 8,
+    "optimizer": "AdamW",
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "epsilon": 1e-08,
+    "weight_decay": 0,
+    "max_grad_norm": 1,
+    "schedule": "constant, no warmup",
+    "max_sequence_tokens": 512,
+    "seed": 20261004,
+    "loss": "Assistant JSON answer tokens only, using the existing JREAD system/user messages and Gemma4 thinking-disabled template; fail if exact prefix masking cannot be established.",
+    "checkpoint_selection": "Final single-epoch adapter from a fresh base initialization only. One v2 run; no checkpoint selection, epoch sweep, or hyperparameter changes after observing fresh validation."
+  },
+  "evaluation": {
+    "primary": {
+      "temperature": 0,
+      "do_sample": false,
+      "max_new_tokens": 256
+    },
+    "secondary": {
+      "temperature": 0.6,
+      "do_sample": true,
+      "top_p": 0.95,
+      "top_k": 64,
+      "seed": 17,
+      "max_new_tokens": 256
+    },
+    "thinking": false,
+    "conditions": [
+      "adapter_off",
+      "adapter_on"
+    ],
+    "first_screen": "All20 newly frozen validation groups, with paired clean and real-Whisper variants; do not pool with prior20 or present40rows as40independent cases.",
+    "meaning_rule": "Preserve every major proposition, roles, polarity, entity and number; natural faithful paraphrases pass. Unsupported additions, omissions, missing/error output fail. Record unclear separately and retain it in the denominator.",
+    "review": "Two condition-blind model-assisted reviews with per-candidate reasons, frozen before joining condition labels; conservative reconciliation and unchanged independent-grade sensitivity. Not native-speaker certification.",
+    "latency": "Measure complete sequential generation and parsing, warmup separate, errors included. Report actual GPU runtime. Do not compare GPU seconds with historical CPU seconds as a training speedup or as browser latency.",
+    "development_followup": "Only after a fresh-validation gain without clean-input regressions, freeze a single candidate and evaluate the unchanged20 development inputs with the unchanged rubric. Never include their references in prompts or training.",
+    "heldout": "Existing50 cases remain unused during pilot selection. A final unseen evaluation is required before production promotion or general accuracy claims.",
+    "max_new_tokens": 256,
+    "primary_temperature": 0,
+    "secondary_temperature": 0.6,
+    "secondary_top_p": 0.95,
+    "secondary_top_k": 64,
+    "secondary_seed": 17,
+    "candidate_selection_rule": "Primary temperature0 is eligible only if adapter-on increases fresh noisy-input passes over its matched adapter-off baseline without losing fresh clean-input passes. If primary is ineligible, apply the identical rule to secondary temperature0.6 seed17. Freeze grades before joining conditions. Otherwise stop v2 without old20 development reruns or promotion. Unclear remains in denominator; independent-grade sensitivity must not reverse eligibility. At most one eligible candidate may proceed to unchanged original20 development followup; original50heldout stays unused until a final candidate and test plan are frozen.",
+    "validation_error_policy": "Retain all20 fresh sourcegroups and exact saved Whisperinputs, including two material corruptions and one gifting/send nuance. No data pruning or target changes based on ASR or translation results."
+  },
+  "execution": {
+    "local_only": true,
+    "uploads": false,
+    "production_changes": false,
+    "gpu_jobs": "Serialize ASR data preparation and model smoke/training/evaluation; one owned GPU job at a time.",
+    "completion": "One completion notification per background chain; no polling loop or recurring schedule."
+  },
+  "hyperparameters": {
+    "rank": 8,
+    "alpha": 16,
+    "dropout": 0.05,
+    "learning_rate": 0.0001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0,
+    "max_grad_norm": 1,
+    "gradient_accumulation": 8,
+    "epochs": 1,
+    "seed": 20261004,
+    "max_length": 512,
+    "scheduler": "constant",
+    "warmup_steps": 0,
+    "target_modules": ".*language_model\\..*\\.(q_proj|v_proj)"
+  },
+  "runner_sha256": "4f08756bcab33c873b0068a3ebcbb1458a43fbb79114e0cd6e02bc643dbabf68",
+  "runtime_manifest_sha256": "61fdaa94588877d63d48f00bc3a80e86f4c79d023c7dbaf2c075ae6aee1c5521",
+  "previous_protocol": {
+    "path": "/home/psikosen/JREAD/tests/fixtures/accuracy-adapter-protocol.json",
+    "sha256": "06390bd0859d63b6f602403fa602b083238a2550f69c2da99dbb84a46fb625c8",
+    "outcome": "completed_not_selected"
+  },
+  "hypothesis": "Additional real recoverable ASR examples may improve noisy-input translation. Most examples remain short read speech and meaning-equivalent variants; this is a limited data-expansion test, not evidence of broad robustness or isolated causal attribution to a specific example."
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "description": "Small evidence-backed glossary for the qualitative caption evaluation corpus. Entries constrain name rendering only; they do not supply full translations.",
+  "evidence_note": "Only entities evidenced in the saved evaluation fixtures are included. Aliases are limited to source spellings found in those fixtures; this glossary is not a complete franchise/person index.",
+  "entries": [
+    {
+      "canonical": "Orihime",
+      "aliases": [
+        "織姫"
+      ],
+      "evidence": [
+        "actual-page-gemma-e4b.json: source 織姫学園長; E4B rendered Orihime Academy Principal."
+      ],
+      "confidence": "high",
+      "asr_terms": [
+        "織姫"
+      ]
+    },
+    {
+      "canonical": "Laala Manaka",
+      "aliases": [
+        "マナカラーラ",
+        "真中らぁら"
+      ],
+      "evidence": [
+        "gemma4-matched-comparison.json dialogue-08: source has ラーラちゃん and phonetic/ambiguous マナカラーラ; site-dialogue-reference.json has the visible caption ‘Laala-chan’.",
+        "Official character identity: https://www.tv-tokyo.co.jp/anime/pripara/chara/index.html lists 真中らぁら. English spelling uses the existing page reference convention."
+      ],
+      "confidence": "mixed",
+      "note": "ラーラ supports the Laala component. マナカラーラ is a noisy phonetic transcript, so do not treat it alone as proof of the canonical full name; name correctness checks in that packet intentionally omit a required full-name substring.",
+      "asr_terms": [
+        "真中らぁら"
+      ]
+    },
+    {
+      "canonical": "Laala",
+      "aliases": [
+        "ラーラ",
+        "らぁら"
+      ],
+      "evidence": [
+        "Given-name form only; do not expand a short address into the full name."
+      ],
+      "confidence": "high",
+      "asr_terms": [
+        "らぁら"
+      ]
+    },
+    {
+      "canonical": "Paprika Academy",
+      "aliases": [
+        "パプリカ学園"
+      ],
+      "evidence": [
+        "actual-page-gemma-e4b.json: source パプリカ学園; E4B rendered Paprika Academy."
+      ],
+      "confidence": "high",
+      "asr_terms": [
+        "パプリカ学園"
+      ]
+    },
+    {
+      "canonical": "PriPara",
+      "aliases": [
+        "プリパラ"
+      ],
+      "evidence": [
+        "gemma4-matched-comparison.json live-04: source begins プリパラ; E4B rendered ‘Of PriPara’."
+      ],
+      "confidence": "high",
+      "asr_terms": [
+        "プリパラ"
+      ]
+    },
+    {
+      "canonical": "Johnny",
+      "aliases": [
+        "ジョニー"
+      ],
+      "evidence": [
+        "actual-page-gemma-e4b.json: source ジョニー先生; E4B rendered Mr. Johnny."
+      ],
+      "confidence": "high",
+      "asr_terms": [
+        "ジョニー"
+      ]
+    }
+  ]
+}

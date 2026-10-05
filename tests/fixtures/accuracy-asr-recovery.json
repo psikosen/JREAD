@@ -1,0 +1,204 @@
+{
+  "schema_version": 1,
+  "status": "frozen",
+  "purpose": "Recover missing Japanese source candidates with native top3 beam decoding, retain genuine model scores, then translate all unique candidates with fixed original GemmaE4B. Development experiment only.",
+  "case_count": 20,
+  "runner_sha256": "a0cd40232afc429a19f0e1bd7013177fb95d27ccd4e733e10cece724bead3445",
+  "model": {
+    "directory": "/home/psikosen/.local/share/JREAD/models/large-v3-turbo",
+    "revision": "0a363e9161cbc7ed1431c9597a8ceaf0c4f78fcf",
+    "model_bin_sha256": "e76620f83d5f5b69efd3d87e3dc180c1bd21df9fbebacfd4335e5e1efcc018da",
+    "bindings": [
+      {
+        "path": "/home/psikosen/.local/share/JREAD/models/large-v3-turbo/config.json",
+        "sha256": "b0253ea6c0d3bea6b1e19e91a02acfd3b53f4467362efcb5a3e6b16c9b3a9b7e"
+      },
+      {
+        "path": "/home/psikosen/.local/share/JREAD/models/large-v3-turbo/preprocessor_config.json",
+        "sha256": "7ccc62c6f2765af1f3b46c00c9b5894426835a05021c8b9c01eecb6dfb542711"
+      },
+      {
+        "path": "/home/psikosen/.local/share/JREAD/models/large-v3-turbo/tokenizer.json",
+        "sha256": "297b13372ac43916285644fb9687add3cc62ee2a1adb60da3dc25cc94c1871fd"
+      },
+      {
+        "path": "/home/psikosen/.local/share/JREAD/models/large-v3-turbo/vocabulary.json",
+        "sha256": "c69260f2ab26d659b7c398f9a2b2b48ed0df16c3b47d7326782fd9cba71690c1"
+      }
+    ]
+  },
+  "runtime": {
+    "python": "/home/psikosen/JREAD/.venv/bin/python",
+    "versions": {
+      "faster-whisper": "1.2.1",
+      "ctranslate2": "4.8.2",
+      "numpy": "2.5.3"
+    },
+    "bindings": [
+      {
+        "path": "/home/psikosen/JREAD/.venv/lib/python3.13/site-packages/faster_whisper/transcribe.py",
+        "sha256": "5d5ffb00018561d3d529b2c72e1d9f5fff055bea725f3cccc7c6c67f5cc8ffe4"
+      },
+      {
+        "path": "/home/psikosen/JREAD/.venv/lib/python3.13/site-packages/ctranslate2/__init__.py",
+        "sha256": "a72a77d4814fbcbee4d69b3fc2c2fae808e24ddd023f90f6c3dcfbbdbb62e2f5"
+      },
+      {
+        "path": "/home/psikosen/JREAD/.venv/lib/python3.13/site-packages/ctranslate2/_ext.cpython-313-x86_64-linux-gnu.so",
+        "sha256": "99e10a6e73da7051ad37f9d4b75e25ec4d4ce550c384068ec209a1b3ee63c448"
+      },
+      {
+        "path": "/home/psikosen/JREAD/requirements.lock",
+        "sha256": "25e001c7f7050914662544dba09a545c90215746087c8ae5efa1974427c2aaa0"
+      },
+      {
+        "path": "/home/psikosen/JREAD/.venv/lib/python3.13/site-packages/faster_whisper/feature_extractor.py",
+        "sha256": "e403966dbc592a53695eea2aea24fa60bab50ef6755e0076b311f907be7a397c"
+      },
+      {
+        "path": "/home/psikosen/JREAD/.venv/lib/python3.13/site-packages/faster_whisper/audio.py",
+        "sha256": "60a1d8638f718cbf6d245aed3e5a5aa61c1f822a0b0fe9b48a7c928d47c23909"
+      },
+      {
+        "path": "/home/psikosen/JREAD/.venv/lib/python3.13/site-packages/faster_whisper/tokenizer.py",
+        "sha256": "614a96b6a9660096e4f4e9fbe8860cd75ad250dce8e85a847998a3d6d48165d2"
+      }
+    ]
+  },
+  "bindings": [
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_caption_verifiers.py",
+      "sha256": "7ff80f33787febd772633307917f43ecf46372f8474c6c7bb84f35aabc0caa8f"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_reazon.py",
+      "sha256": "0e516982356d200c14738ced3390b2b94e65c81bf9fc94594a4f3e1d9357a39a"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/asr_cuda_pilot.py",
+      "sha256": "9b727caa88ea6bd1689284a24783ed1a850bb13b78deff166f028e069923acb6"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-asr-recovery/runtime-review.json",
+      "sha256": "4d5d783076f0fccf2cd230d1bfb9d729236ec50b93e55c3b6ce078350dd41de3"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-asr-recovery/asr-runner-review.json",
+      "sha256": "2e8726ad20eb35832c106b24ec3f561717b789c61c328a3d64dbf486b2fc10bc"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-asr-recovery/source-review/whisper.cc",
+      "sha256": "cb2b7420667cda9d900e6f49b8a6eca08139e3c8f0dccbff06657ba6dd5e1e3e"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-asr-recovery/source-review/decoding.cc",
+      "sha256": "b1b871a8c3f0dd191a917637919dfbbc9118640621230da52114e01bc0c7326d"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-asr-recovery/source-review/provenance.json",
+      "sha256": "a35fc7741efa662fda8c2aab54d27e7c0ca08de4cca8f500d7282d996af512c0"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-asr-recovery/asr-runner-review-v2.json",
+      "sha256": "6b289562a35a2cb0e0e2325f5c588f8cdd834edb4070e79192b1d190dad4790b"
+    }
+  ],
+  "settings": {
+    "device": "cuda",
+    "device_index": 0,
+    "compute_type": "int8_float16",
+    "cpu_threads": 4,
+    "num_workers": 1,
+    "language": "ja",
+    "task": "transcribe",
+    "vad_filter": false,
+    "without_timestamps": true,
+    "condition_on_previous_text": false,
+    "beam_size": 5,
+    "num_hypotheses": 3,
+    "patience": 1.0,
+    "length_penalty": 1.0,
+    "repetition_penalty": 1.0,
+    "no_repeat_ngram_size": 0,
+    "max_length": 448,
+    "sampling_enabled": false,
+    "temperature": 0.0,
+    "return_scores": true,
+    "return_no_speech_prob": true
+  },
+  "development_audio": {
+    "path": "/media/psikosen/newvolume/jread-asr-recovery/data/development-audio-v1.json",
+    "sha256": "cfa2e5dc135551b21e91b8d5978b5bbb017c240c24d75e0cb8462f0e1bb1a639"
+  },
+  "controls_audio": {
+    "path": "/media/psikosen/newvolume/jread-asr-recovery/data/controls-audio-v2.json",
+    "sha256": "346cfce3cca1384f26ec8de0adc7828a8faeb91ab459fafa67129cee13be2e83"
+  },
+  "context_audio": {
+    "path": "/media/psikosen/newvolume/jread-asr-recovery/data/context-audio-v1.json",
+    "sha256": "4b880e8cbbecc606fee7ff3d4f4905b77e258787eeea10ade898a07d5c63a430"
+  },
+  "review_only": {
+    "path": "/media/psikosen/newvolume/jread-asr-recovery/data/development-review-only-v1.json",
+    "sha256": "76c3f3db8cfb49cd3b9735d44f5a1df804a2e4d2f7e9af1a0c0f55637f7e153c"
+  },
+  "rubric": {
+    "path": "/home/psikosen/JREAD/tests/fixtures/accuracy-development-rubric.json",
+    "sha256": "ce7514d3e12dded03e3c2ce0894cb0e3750720d0034aec0f63d45256cf3a89e9"
+  },
+  "translation_cache": {
+    "path": "/media/psikosen/newvolume/jread-asr-recovery/data/translation-cache-v1.json",
+    "sha256": "4f7969e0441dabf5ef1945529df8629976e0c1ff8c465a51c49b5afa68865e88"
+  },
+  "experimental_difference": "Nativefullclip top3, VADoff, no timestamp tokens, fixedbeamdecode versus saved timestamp/VAD/fallback wrapper. These are coupled changes; no Nbest-only causal gain claim. Allsame20WAVs, no outsidecontextexists.",
+  "controls_policy": "Two previously accepted TRAINspeech clips and1secondzeros. Technical gate completefinite native3rankoutputs and validper-token evidence belowlengthcap, correctmodel/device, ownedworkerreleased. Silence/exacttranscriptquality reporteddescriptively, not all-correct gate; largerproductionqualitynotestablished.",
+  "context_policy": "Twofixedwaveformwindows fromsame59.971s animecapture: target15.86–31.86 andleftcontext1.86–31.86. Adds14s realprecedingaudio. Differentcontentcoverage, no directCER/accuracycomparison. Japanese reference/speakerlabels unverified; qualitativeonly. Neverclaimverifiedepisodeoffset.",
+  "translation_policy": "After ASRtechnicalcompletion, freeze newpubliccandidatepacket/hash. OriginalGemmaE4B model/runtime/prompt, CPU8threads, temp0, no seed, max1024, thinkingoff, emptycontext/noglossary. Translate everyuniqueASRtext up to3 percase, reuse exactdeterministicexistingrequest outputs only. No references or grades in inference. Translation cache includes originalbaseline unchanged; no successfulrequestreruns.",
+  "selection_rule": "Actualprimary is native decoder rawrank0 English. Fixedrank1 andrank2 descriptive. Originalbaseline retained as separate13/20comparator. Oracle coverage overoldbaseline+newcandidates is hypothetical, not deployedaccuracy. No human/ref-guided candidate selection or posthocscorethresholding.",
+  "grading_rule": "Preserve exact previousEnglishoutput frozen grades for identicalcase/output, blind independent Japanese-authoritative unchanged rubric for newoutputs. Source candidates separately checked for essentialpropositions against frozenJapanese reference. No postscore regrading;uncertainty remainsdenominator with sensitivityseparate. Gradeall20includingoldpasses.",
+  "timing_rule": "Separate modelstartup,warmup,ASRgeneration,alignment,translationandcachedhistoricalrequestcosts. Sequentialfullpool compute reported, rank0-only lower-bound clearly excludesactualrequired beam/align cost when appropriate. Not browser latency.",
+  "scope_limits": [
+    "Original50heldoutunopened;productionunchanged.",
+    "Previously studied20developmentset;no generalization or anime90%claim.",
+    "Sequence/alignment probabilities include model priors,notpureacoustic truth or calibratedcorrectness.",
+    "No syntheticextra hypotheses if fewerthan3distincttexts.",
+    "No realaudiooutsideexistingfile fabricated bypadding.",
+    "One ownedmodelworker at a time underglobal lock;no privateportmodeloverlap."
+  ],
+  "case_ids": {
+    "development_audio": [
+      "1632",
+      "1638",
+      "1604",
+      "1607",
+      "1641",
+      "1569",
+      "1571",
+      "1514",
+      "1592",
+      "1559",
+      "1643",
+      "1639",
+      "1539",
+      "1649",
+      "1517",
+      "1627",
+      "1622",
+      "1562",
+      "1636",
+      "1647"
+    ],
+    "controls_audio": [
+      "train0666",
+      "train0041",
+      "zero-pcm-1s"
+    ],
+    "context_audio": [
+      "anime-target",
+      "anime-left-context"
+    ]
+  },
+  "frozen_at_utc": "2026-10-05T03:33:42.903199+00:00",
+  "ct2_native_generated_token_cap": 224,
+  "amended_at_utc": "2026-10-05T03:34:38.030305+00:00"
+}

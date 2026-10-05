@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "JREAD — Local captions",
+  "version": "0.1.0",
+  "description": "Apply local subtitle tracks and translate Japanese tab audio with your paired JREAD companion.",
+  "minimum_chrome_version": "116",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "tabCapture",
+    "offscreen",
+    "storage",
+    "nativeMessaging",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1:8765/*"
+  ],
+  "optional_host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "action": {
+    "default_title": "JREAD captions",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "dist/worker.js"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'; connect-src http://127.0.0.1:8765 ws://127.0.0.1:8765"
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAysoNFXZWX4mBWNLm/qWhkOPugzd5pxe6UQaFemO3i79SPK0gvV8s2P2YovGo4+N1HuL3DDeqAIoA+nq/mX9I4FytCSLu0i78cp6LwrPPtE2Um8hfNrhSCxIqVlRtl/lDeT5U4Sh2gBV4XNBjN7sy+EmvQyql0Ztwj1H4Qj4k2bQbNy609eA7MwD5eSMUglhPu7CNThs247XXh+p8u4zZkAfumdPTCWOXEmrKzCaIfyq69z4HEa2ApIyzAMykOuq5q7PF46hbuntzO7P/8g+KBnp6jYxNHx+8l6mHc3zgIGfg/1uwuj0dNrdXSspVmfmM0f82uu59tjFv4kdp9o8CfwIDAQAB"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "jread",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:extension": "node scripts/build-extension.mjs",
+    "check:extension": "tsc --noEmit",
+    "test": ".venv/bin/python -m pytest -q tests/test_core.py tests/test_gemma.py tests/test_live_context.py tests/test_caption_hints.py && npm run check:extension && node extension/tests/run.mjs",
+    "test:ui": "node tests/ui-smoke.mjs",
+    "test:browser": "node tests/extension-smoke.mjs",
+    "test:inference": "PYTHONPATH=. .venv/bin/python tests/smoke_inference.py",
+    "test:live": "PYTHONPATH=. .venv/bin/python tests/smoke_live.py"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/chrome": "0.3.4",
+    "esbuild": "0.28.2",
+    "typescript": "7.0.2"
+  }
+}

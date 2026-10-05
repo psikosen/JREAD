@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "status": "frozen",
+  "purpose": "Bidirectional source-support checker development diagnostic on previously evaluated synthetic data; no natural-caption accuracy claim.",
+  "model": {
+    "python": "/media/psikosen/newvolume/jread-verifier/laya/.venv/bin/python",
+    "helper": "/media/psikosen/newvolume/jread-verifier/grounding-base/score_pairs.py",
+    "model_id": "Horizon-Labs/hallucination-guard-base",
+    "model_revision": "f0aaaac7c39073b4528191261e874d9664f14254",
+    "bindings": [
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/grounding-base/manifest.json",
+        "sha256": "33031cc2b11ec6d551656c315936e3110777bcbaf9fd3cf1dc760c60e7fd2e78"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/laya/runtime-requirements.lock",
+        "sha256": "226618aef0ccee4136eae130ba51297f8cfc1019fc74292179b34d673bdcc722"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/laya/.venv/lib/python3.12/site-packages/transformers/models/modernbert/modeling_modernbert.py",
+        "sha256": "4083663344b3118936fe1715b325731460d681ff798455bb01e7e9d8accee292"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/laya/.venv/lib/python3.12/site-packages/transformers/models/modernbert/configuration_modernbert.py",
+        "sha256": "6bddc1471bde497acf90e786585df6bf2a4a43c913c572a1ba2e6b3315b2b648"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/laya/.venv/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py",
+        "sha256": "e3dfc3e7bc858498cf61ef58b3240f57e3490e785a160281f5a8b3ab20966f76"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/laya/.venv/lib/python3.12/site-packages/transformers/models/auto/modeling_auto.py",
+        "sha256": "34a2022f97b149b4a941a7a86f1465aee197cc442e06c0f888728397bcaf63cc"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/laya/.venv/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py",
+        "sha256": "d8ddbba55ef683bd4980313104b192a0468aecb5a8a35491f1c48ae8c8bff3fe"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/laya/.venv/lib/python3.12/site-packages/transformers/modeling_utils.py",
+        "sha256": "3b615a8d21cbbf8e4193422db7d168b4567ad25688aa585ffe440bd6cb128ba3"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/laya/.venv/lib/python3.12/site-packages/transformers/tokenization_utils_base.py",
+        "sha256": "d683db2cf815e9a524edf691c10c7f2a05f408cd8d52a7036724403181bb6ee0"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/grounding-base/score_pairs.py",
+        "sha256": "60e75320ccfa27dbe80820428997beb9681eccf82b95bda5c7bed6eda206c68f"
+      },
+      {
+        "path": "/media/psikosen/newvolume/jread-verifier/laya/.venv/lib/python3.12/site-packages/transformers/utils/loading_report.py",
+        "sha256": "2ade91b3101cd8370ca17083e0c33039cde4236d4d4a94295604224269d333e8"
+      }
+    ],
+    "artifact_verification": "Bound manifest contains SHA256 and sizes for all6 pinned model/tokenizer/card files; helper verifies every file before tokenization/load."
+  },
+  "bindings": [
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_caption_verifiers.py",
+      "sha256": "7ff80f33787febd772633307917f43ecf46372f8474c6c7bb84f35aabc0caa8f"
+    },
+    {
+      "path": "/home/psikosen/JREAD/tests/evaluate_reazon.py",
+      "sha256": "0e516982356d200c14738ced3390b2b94e65c81bf9fc94594a4f3e1d9357a39a"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-verifier/quantity-v2/independent-audit.json",
+      "sha256": "da73cece6e85e77c95aca51d3041df80b1943d45109fe1f4ac97b2e7fcd9797e"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-verifier/grounding-v1-technical-review.json",
+      "sha256": "2b79d0970747fe3fbcf60e21e0a08f0317581bd9d20455269324f2332d7af64d"
+    },
+    {
+      "path": "/media/psikosen/newvolume/jread-verifier/grounding-v1-root-technical-review.json",
+      "sha256": "e08b89705aed0a9238c9fcc607f1f9ebb38801ff1843a5b808976efc93c3d9fb"
+    }
+  ],
+  "fixture": {
+    "path": "/media/psikosen/newvolume/jread-verifier/data/quantity-v2.json",
+    "sha256": "ec220e9573ece719da11ef696a11cf7fada0fa47076bc66231363a0c6363b2e9"
+  },
+  "fixture_review": {
+    "path": "/media/psikosen/newvolume/jread-verifier/data/quantity-v2-root-review.json",
+    "sha256": "d80b001d0f716224fa23ae614f97d5fa91743be8cf4560ea7a9c2bd3f1112308"
+  },
+  "controls": {
+    "path": "/media/psikosen/newvolume/jread-verifier/data/grounding-controls-v1.json",
+    "sha256": "4552506d98b35a23c1d096970d5643c36fe44d6c2347db30f56bb8d5b609517d"
+  },
+  "controls_review": {
+    "path": "/media/psikosen/newvolume/jread-verifier/data/grounding-controls-review-v1.json",
+    "sha256": "2180182bc3a6bf5b0f195177594891e5cc2b4673f1950edb5d7db9bdbdcc539f"
+  },
+  "baseline_report": {
+    "path": "/media/psikosen/newvolume/jread-verifier/quantity-v2/screen/report.json",
+    "sha256": "c04708b3b05a5e83d600c7ea9365b66dde9018b57943bd1524ae50eced6a1a33"
+  },
+  "case_count": 32,
+  "control_count": 6,
+  "strata": {
+    "date_time": 8,
+    "money_measurement": 8,
+    "equivalent_or_unsupported": 8,
+    "other_meaning": 8
+  },
+  "public_request_schema": [
+    "request_id",
+    "premise",
+    "hypothesis"
+  ],
+  "primary_score": "min(P_SUPPORTED(source Japanese -> English candidate), P_SUPPORTED(English candidate -> source Japanese)). Each candidate evaluated independently in both directions; no gold/reference/label in model input.",
+  "secondary_score": "Forward-only P_SUPPORTED(source Japanese -> English candidate), predefined descriptive ablation. Cannot replace primary after results.",
+  "primary_metric": "128 strict good > bad comparisons across32 fixed source groups, two faithful and two erroneous candidates each. Ties fail. 64 comparisons per faithful variant. All labels and propositions reused unchanged.",
+  "technical_plan": "Tokenize all304 directional requests with no weights loaded. One serial CPU FP32 four-thread technical smoke on48 control requests. Then one serial main worker for256 requests plus one explicit smoke-control warmup. Native local-only safetensors load, eager attention, deterministic eval, batch1,2048 token maximum,no truncation. No successful score reruns.",
+  "smoke_gate": "Technical only: all48 finite,untruncated,exact-row scores from verified complete CPU FP32 checkpoint and owned worker released. Semantic results are descriptive and need not be all correct to permit main development diagnostic.",
+  "warmup_rule": "Prepend first opaque-ID-sorted bound smoke request once; exclude from main comparison denominators and scoring seconds.",
+  "further_study_rule": "Primary >=90% overall, >=75% in every stratum, >=90% faithful paraphrase variant1 comparisons, complete technical execution, and independent audit. Eligibility only to consider fresh independent validation, not production. Secondary cannot substitute.",
+  "baseline_rule": "Reuse actual saved quantity-v2 XCOMET baseline and quantity-combined pass sets bound to identical fixture bytes. Report paired gains and regressions. Historical saved baseline latency explicitly separate, no baseline regeneration.",
+  "limitations": [
+    "This is a reused development set, chosen after examining aggregate errors, not fresh validation.",
+    "128 within-group pairs are correlated; only32 distinct Japanese sources.",
+    "The model card reports Japanese translated hallucination tests, not Japanese-English translation suitability.",
+    "Bidirectional support probabilities are uncalibrated model scores, not measured correctness probabilities.",
+    "Synthetic controls/challenges are model-authored/reviewed, not human-certified natural speech.",
+    "No original50 heldout,old20 followup,ASR rerun,finetuning,cloud inference or production changes."
+  ],
+  "runner_sha256": "41d94591240ec3d26ed9257ed235abda8a3919def264a3261fb1e9f234fe72ce",
+  "execution_safeguards": {
+    "global_lock": "/media/psikosen/newvolume/jread-verifier/evaluation.lock; nonblocking exclusive ownership held until process-group cleanup finishes. Ports18767 and18768 must be free.",
+    "loading": "Verify pinned model files before native safetensors load. Preserve loading_info with zero missing/unexpected/mismatched/error keys. Fail incomplete load. No remote code.",
+    "actual_runtime": "Record actual parameter device/dtype sets, logits dtype, CPU four-thread count and CUDA initialization state; require all parameters/logits CPU FP32 and CUDA uninitialized. Validate-only must load no model and report actual no-CUDA state.",
+    "failure": "Checkpoint completed worker rows atomically after each request. Stop on first error, retain error/traceback and unprocessed request IDs. Never label incomplete output complete.",
+    "labels": "Frozen bilingual labels and propositions are immutable after any model scores. No post-score regrading or candidate substitution.",
+    "cleanup": "Each worker gets an owned process group. Timeout/error cleanup uses TERM then KILL as needed; any unreleased worker or residual group fails technical completion."
+  },
+  "frozen_at_utc": "2026-10-05T02:54:24.467775+00:00"
+}
